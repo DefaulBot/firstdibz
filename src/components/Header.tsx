@@ -8,18 +8,14 @@ import type { ReadonlyURLSearchParams } from "next/navigation";
 import logo from "@/public/logo.jpeg";
 import {
   Search,
-  UserCircle2,
-  BarChart3,
   ShoppingCart,
   Heart,
   MessageCircle,
   Menu,
   X,
 } from "lucide-react";
-import { Button } from "./ui/Button";
-import { Input } from "./ui/Input";
-import { cn } from "@/lib/utils";
 import { useAuth } from "./AuthProvider";
+import { useCartCount } from "@/lib/cart";
 
 interface HeaderProps {
   searchParams?: ReadonlyURLSearchParams;
@@ -30,11 +26,12 @@ export function Header({ searchParams: propsSearchParams }: HeaderProps = {}) {
   const router = useRouter();
   const pathname = usePathname();
   const hooksSearchParams = useSearchParams();
-  // Use prop if provided, otherwise fall back to hook (for backward compatibility)
   const searchParams = propsSearchParams || hooksSearchParams;
+
   const [isAdmin, setIsAdmin] = useState(false);
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const sideNavRef = useRef<HTMLDivElement>(null);
+  const cartCount = useCartCount();
 
   const currentQ = useMemo(() => searchParams.get("q") ?? "", [searchParams]);
   const [q, setQ] = useState(currentQ);
@@ -67,129 +64,124 @@ export function Header({ searchParams: propsSearchParams }: HeaderProps = {}) {
 
   return (
     <>
-      {/* Main Header */}
-      <header className="fixed top-[44px] left-0 right-0 z-[1000] bg-[#0f2f63] shadow-lg">
+      <header className="fixed left-0 right-0 top-[44px] z-[1000] bg-[#0f2f63] shadow-lg">
         <div className="mx-auto max-w-7xl px-4">
           <div className="flex items-center justify-between py-4">
-            {/* Logo */}
-            <Link href="/" className="flex items-center gap-2 shrink-0">
+            <Link href="/" className="flex shrink-0 items-center gap-2">
               <Image
                 src={logo}
                 alt="Firs' Dibs BZ Logo"
                 width={50}
                 height={50}
-                className="rounded-lg h-12 w-auto"
+                className="h-12 w-auto rounded-lg"
               />
-              <div className="hidden sm:flex flex-col">
-                <div className="text-white font-black font-montserrat text-lg leading-tight">
+              <div className="hidden flex-col sm:flex">
+                <div className="font-montserrat text-lg font-black leading-tight text-white">
                   Firs' Dibs BZ
                 </div>
-                <div className="text-[#87ef61] text-xs font-semibold tracking-wider">
+                <div className="text-xs font-semibold tracking-wider text-[#87ef61]">
                   PAY HALF NOW. PAY OTHER HALF LATER.
                 </div>
               </div>
             </Link>
 
-            {/* Search Bar - Hidden on Mobile, smaller on desktop */}
             <form
               onSubmit={(e) => {
                 e.preventDefault();
                 submit();
               }}
-              className="hidden md:flex mx-4 max-w-sm flex-1"
+              className="mx-4 hidden max-w-sm flex-1 md:flex"
             >
-              <div className="w-full relative">
+              <div className="relative w-full">
                 <input
                   type="text"
                   placeholder="Search for products, brands, and more..."
                   value={q}
                   onChange={(e) => setQ(e.target.value)}
-                  className="w-full bg-white text-[#0f2f63] placeholder-zinc-400 px-5 py-3 rounded-full border-0 focus:outline-none focus:ring-2 focus:ring-[#87ef61] text-sm"
+                  className="w-full rounded-full border-0 bg-white px-5 py-3 text-sm text-[#0f2f63] placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-[#87ef61]"
                 />
                 <button
                   type="submit"
-                  className="absolute right-0 top-1/2 -translate-y-1/2 text-[#0f2f63] pr-4 hover:text-[#87ef61] transition-colors"
+                  className="absolute right-0 top-1/2 -translate-y-1/2 pr-4 text-[#0f2f63] transition-colors hover:text-[#87ef61]"
                 >
                   <Search size={18} />
                 </button>
               </div>
             </form>
 
-            {/* Desktop Navigation Menu */}
-            <nav className="hidden lg:flex items-center gap-8 flex-1 justify-center">
+            <nav className="hidden flex-1 items-center justify-center gap-8 lg:flex">
               <Link
                 href="/"
-                className="text-white hover:text-[#87ef61] transition-colors font-medium text-sm"
+                className="text-sm font-medium text-white transition-colors hover:text-[#87ef61]"
               >
                 Home
               </Link>
               <Link
                 href="/search"
-                className="text-white hover:text-[#87ef61] transition-colors font-medium text-sm"
+                className="text-sm font-medium text-white transition-colors hover:text-[#87ef61]"
               >
                 Shop
               </Link>
               <Link
                 href="/account"
-                className="text-white hover:text-[#87ef61] transition-colors font-medium text-sm"
+                className="text-sm font-medium text-white transition-colors hover:text-[#87ef61]"
               >
                 My Account
               </Link>
               {!loading && isAdmin && (
                 <Link
                   href="/admin"
-                  className="text-white hover:text-[#87ef61] transition-colors font-medium text-sm"
+                  className="text-sm font-medium text-white transition-colors hover:text-[#87ef61]"
                 >
                   Admin
                 </Link>
               )}
             </nav>
 
-            {/* Right Icons */}
             <div className="flex items-center gap-4">
-              {/* Cart Icon */}
               <Link
-                href="/search"
-                className="relative text-white hover:text-[#87ef61] transition-colors p-2 hidden sm:block"
+                href="/cart"
+                className="relative hidden p-2 text-white transition-colors hover:text-[#87ef61] sm:block"
               >
                 <ShoppingCart size={24} />
+                {cartCount > 0 ? (
+                  <span className="absolute -right-1 -top-1 inline-flex h-5 min-w-[20px] items-center justify-center rounded-full bg-[#87ef61] px-1 text-xs font-black text-[#0f2f63]">
+                    {cartCount}
+                  </span>
+                ) : null}
               </Link>
 
-              {/* Heart Icon */}
               <Link
                 href="/search"
-                className="text-white hover:text-[#87ef61] transition-colors p-2 hidden sm:block"
+                className="hidden p-2 text-white transition-colors hover:text-[#87ef61] sm:block"
               >
                 <Heart size={24} />
               </Link>
 
-              {/* WhatsApp Icon */}
               <a
                 href="https://wa.me/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-white hover:text-[#87ef61] transition-colors p-2 hidden sm:block"
+                className="hidden p-2 text-white transition-colors hover:text-[#87ef61] sm:block"
               >
                 <MessageCircle size={24} />
               </a>
 
-              {/* Mobile Menu Button */}
               <button
                 onClick={toggleSideNav}
-                className="text-white hover:text-[#87ef61] transition-colors p-2 lg:hidden"
+                className="p-2 text-white transition-colors hover:text-[#87ef61] lg:hidden"
               >
                 {showMobileMenu ? <X size={24} /> : <Menu size={24} />}
               </button>
             </div>
           </div>
 
-          {/* Mobile Search Bar */}
           <form
             onSubmit={(e) => {
               e.preventDefault();
               submit();
             }}
-            className="md:hidden pb-4"
+            className="pb-4 md:hidden"
           >
             <div className="relative">
               <input
@@ -197,11 +189,11 @@ export function Header({ searchParams: propsSearchParams }: HeaderProps = {}) {
                 placeholder="Search for products, brands, and more..."
                 value={q}
                 onChange={(e) => setQ(e.target.value)}
-                className="w-full bg-white text-[#0f2f63] placeholder-zinc-400 px-5 py-3 rounded-full border-0 focus:outline-none focus:ring-2 focus:ring-[#87ef61] text-sm"
+                className="w-full rounded-full border-0 bg-white px-5 py-3 text-sm text-[#0f2f63] placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-[#87ef61]"
               />
               <button
                 type="submit"
-                className="absolute right-0 top-1/2 -translate-y-1/2 text-[#0f2f63] pr-4"
+                className="absolute right-0 top-1/2 -translate-y-1/2 pr-4 text-[#0f2f63]"
               >
                 <Search size={18} />
               </button>
@@ -210,42 +202,37 @@ export function Header({ searchParams: propsSearchParams }: HeaderProps = {}) {
         </div>
       </header>
 
-      {/* Side Navigation Overlay */}
       {showMobileMenu && (
         <div
-          className="fixed inset-0 bg-black/50 z-[999]"
+          className="fixed inset-0 z-[999] bg-black/50"
           onClick={() => setShowMobileMenu(false)}
         />
       )}
 
-      {/* Side Navigation Menu */}
       <div
         ref={sideNavRef}
-        className={`fixed right-0 top-0 h-screen w-72 bg-white shadow-2xl z-[1001] transition-transform duration-300 overflow-y-auto ${
+        className={`fixed right-0 top-0 z-[1001] h-screen w-72 overflow-y-auto bg-white shadow-2xl transition-transform duration-300 ${
           showMobileMenu ? "translate-x-0" : "translate-x-full"
         }`}
       >
         <div className="p-6">
-          {/* Close Button */}
           <button
             onClick={() => setShowMobileMenu(false)}
-            className="absolute top-4 right-4 text-[#0f2f63]"
+            className="absolute right-4 top-4 text-[#0f2f63]"
           >
             <X size={28} />
           </button>
 
-          {/* User Avatar Section */}
-          <div className="mt-8 mb-8 text-center">
-            <div className="mx-auto w-20 h-20 rounded-full bg-gradient-to-br from-[#0f2f63] to-[#87ef61] flex items-center justify-center text-white text-3xl font-bold mb-3">
+          <div className="mb-8 mt-8 text-center">
+            <div className="mx-auto mb-3 flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-[#0f2f63] to-[#87ef61] text-3xl font-bold text-white">
               👤
             </div>
-            <h3 className="font-montserrat font-bold text-[#0f2f63] text-lg">
+            <h3 className="font-montserrat text-lg font-bold text-[#0f2f63]">
               {user?.email ? user.email.split("@")[0] : "Guest User"}
             </h3>
-            <p className="text-zinc-600 text-sm">Welcome to Firs' Dibs BZ</p>
+            <p className="text-sm text-zinc-600">Welcome to Firs' Dibs BZ</p>
           </div>
 
-          {/* Navigation Links */}
           <nav className="space-y-4">
             <SideNavLink
               href="/"
@@ -255,6 +242,11 @@ export function Header({ searchParams: propsSearchParams }: HeaderProps = {}) {
             <SideNavLink
               href="/search"
               label="Shop"
+              onClick={() => setShowMobileMenu(false)}
+            />
+            <SideNavLink
+              href="/cart"
+              label={cartCount > 0 ? `Cart (${cartCount})` : "Cart"}
               onClick={() => setShowMobileMenu(false)}
             />
             <SideNavLink
@@ -276,13 +268,12 @@ export function Header({ searchParams: propsSearchParams }: HeaderProps = {}) {
             )}
           </nav>
 
-          {/* Auth Section */}
-          <div className="mt-8 pt-6 border-t border-zinc-200">
+          <div className="mt-8 border-t border-zinc-200 pt-6">
             {!loading && !user ? (
               <Link
                 href="/signin"
                 onClick={() => setShowMobileMenu(false)}
-                className="block w-full bg-gradient-to-r from-[#0f2f63] to-[#1a3f7a] text-white font-semibold py-3 rounded-lg text-center hover:shadow-lg transition-all"
+                className="block w-full rounded-lg bg-gradient-to-r from-[#0f2f63] to-[#1a3f7a] py-3 text-center font-semibold text-white transition-all hover:shadow-lg"
               >
                 Sign In
               </Link>
@@ -293,25 +284,24 @@ export function Header({ searchParams: propsSearchParams }: HeaderProps = {}) {
                   setShowMobileMenu(false);
                   router.push("/");
                 }}
-                className="block w-full bg-red-500 text-white font-semibold py-3 rounded-lg hover:bg-red-600 transition-colors"
+                className="block w-full rounded-lg bg-red-500 py-3 font-semibold text-white transition-colors hover:bg-red-600"
               >
                 Sign Out
               </button>
             ) : null}
           </div>
 
-          {/* Footer Links */}
-          <div className="mt-8 pt-6 border-t border-zinc-200">
+          <div className="mt-8 border-t border-zinc-200 pt-6">
             <div className="space-y-3 text-sm">
               <a
                 href="/search"
-                className="block text-zinc-600 hover:text-[#0f2f63] transition-colors"
+                className="block text-zinc-600 transition-colors hover:text-[#0f2f63]"
               >
                 Browse Products
               </a>
               <a
                 href="/"
-                className="block text-zinc-600 hover:text-[#0f2f63] transition-colors"
+                className="block text-zinc-600 transition-colors hover:text-[#0f2f63]"
               >
                 About Us
               </a>
@@ -319,7 +309,7 @@ export function Header({ searchParams: propsSearchParams }: HeaderProps = {}) {
                 href="https://wa.me/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="block text-zinc-600 hover:text-[#0f2f63] transition-colors"
+                className="block text-zinc-600 transition-colors hover:text-[#0f2f63]"
               >
                 Contact Support
               </a>
@@ -328,7 +318,6 @@ export function Header({ searchParams: propsSearchParams }: HeaderProps = {}) {
         </div>
       </div>
 
-      {/* Add padding to page content for fixed header */}
       <div className="h-[84px] md:h-[120px]" />
     </>
   );
@@ -347,7 +336,7 @@ function SideNavLink({
     <Link
       href={href}
       onClick={onClick}
-      className="block px-4 py-3 rounded-lg text-[#0f2f63] font-medium hover:bg-gradient-to-r hover:from-[#0f2f63] hover:to-[#1a3f7a] hover:text-white transition-all"
+      className="block rounded-lg px-4 py-3 font-medium text-[#0f2f63] transition-all hover:bg-gradient-to-r hover:from-[#0f2f63] hover:to-[#1a3f7a] hover:text-white"
     >
       {label}
     </Link>

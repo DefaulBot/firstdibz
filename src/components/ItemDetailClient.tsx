@@ -11,6 +11,7 @@ import { Badge } from "./ui/Badge";
 import { useAuth } from "./AuthProvider";
 import { useRouter } from "next/navigation";
 import { formatBzd } from "@/lib/utils";
+import { addCartItem, useCart } from "@/lib/cart";
 
 export function ItemDetailClient({ item }: { item: ItemDetail }) {
   const router = useRouter();
@@ -20,14 +21,22 @@ export function ItemDetailClient({ item }: { item: ItemDetail }) {
     supabase,
     supabaseConfigured,
   } = useAuth();
+
+  const { items: cartItems } = useCart();
+
   const images = useMemo(() => item.images ?? [], [item.images]);
   const [active, setActive] = useState(
     images.find((x) => x.id === item.current_image)?.id ?? images[0]?.id,
   );
 
+  const cartEntry = useMemo(
+    () => cartItems.find((x) => String(x.product_id) === String(item.id)),
+    [cartItems, item.id],
+  );
+
   const [saved, setSaved] = useState<boolean>(false);
   const [hasOrder, setHasOrder] = useState<boolean>(false);
-  const [busy, setBusy] = useState<"save" | "order" | null>(null);
+  const [busy, setBusy] = useState<"save" | "cart" | null>(null);
   const [flash, setFlash] = useState<string | null>(null);
 
   const activeUrl = images.find((x) => x.id === active)?.image ?? item.image;
@@ -37,6 +46,7 @@ export function ItemDetailClient({ item }: { item: ItemDetail }) {
       typeof window !== "undefined"
         ? window.location.href
         : item.share_link || "";
+
     try {
       if (url) await navigator.clipboard.writeText(url);
     } catch {
@@ -55,11 +65,13 @@ export function ItemDetailClient({ item }: { item: ItemDetail }) {
       supabase
         .from("saved_items")
         .select("id")
+        .eq("user_id", user.id)
         .eq("product_id", item.id)
         .limit(1),
       supabase
         .from("orders")
         .select("id")
+        .eq("user_id", user.id)
         .eq("product_id", item.id)
         .neq("status", "cancelled")
         .limit(1),
@@ -69,11 +81,9 @@ export function ItemDetailClient({ item }: { item: ItemDetail }) {
     setHasOrder(Boolean(orderRows?.length));
   }
 
-  // Load saved/order state when session changes.
   useEffect(() => {
     if (!authLoading) {
-      // eslint-disable-next-line @typescript-eslint/no-floating-promises
-      refreshUserState();
+      void refreshUserState();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user?.id, authLoading, item.id]);
@@ -96,11 +106,18 @@ export function ItemDetailClient({ item }: { item: ItemDetail }) {
 
   async function toggleSave() {
     if (!requireAuth()) return;
+
     setBusy("save");
     setFlash(null);
+
     try {
       if (saved) {
-        await supabase!.from("saved_items").delete().eq("product_id", item.id);
+        await supabase!
+          .from("saved_items")
+          .delete()
+          .eq("user_id", user!.id)
+          .eq("product_id", item.id);
+
         setSaved(false);
         setFlash("Removed from saved items.");
       } else {
@@ -110,6 +127,7 @@ export function ItemDetailClient({ item }: { item: ItemDetail }) {
             { user_id: user!.id, product_id: item.id },
             { onConflict: "user_id,product_id" },
           );
+
         setSaved(true);
         setFlash("Saved for later.");
       }
@@ -120,49 +138,39 @@ export function ItemDetailClient({ item }: { item: ItemDetail }) {
     }
   }
 
-  async function startPreorder() {
-    if (!requireAuth()) return;
+  async function addToCart() {
+    if (hasOrder) {
+      router.push("/account");
+      return;
+    }
+
+    if (cartEntry) {
+      router.push("/cart");
+      setFlash("This item is already in your cart.");
+      return;
+    }
+
     if (item.out_of_stock) {
       setFlash("This item is currently out of stock.");
       return;
     }
 
-    setBusy("order");
+    setBusy("cart");
     setFlash(null);
+    console.log(item);
     try {
-      // Calculate order amounts based on item price
-      const quantity = 1;
-      const total_amount = item.price.value * quantity;
-      const deposit_amount = Math.round((total_amount / 2) * 100) / 100;
-      const balance_amount =
-        Math.round((total_amount - deposit_amount) * 100) / 100;
-      const points_earned = Math.max(10, Math.round(total_amount * 2.5));
+      addCartItem({
+        product_id: item.id,
+        title: item.title,
+        image: item.image,
+        price: item.price.value,
+        out_of_stock: item?.out_of_stock ?? false,
+        points_earned: item?.points_earned ?? null,
+      });
 
-      const { error } = await supabase!.from("orders").upsert(
-        {
-          user_id: user!.id,
-          product_id: item.id,
-          quantity,
-          status: "preorder",
-          total_amount,
-          deposit_amount,
-          balance_amount,
-          amount_paid: 0,
-          points_earned,
-        },
-        { onConflict: "user_id,product_id" },
-      );
-
-      if (error) throw error;
-      setHasOrder(true);
-
-      // Optional: unsave on successful preorder
-      await supabase!.from("saved_items").delete().eq("product_id", item.id);
-      setSaved(false);
-
-      router.push("/account");
+      setFlash("Added to cart.");
     } catch (e: any) {
-      setFlash(e?.message ?? "Could not create preorder");
+      setFlash(e?.message ?? "Could not add item to cart");
     } finally {
       setBusy(null);
     }
@@ -278,15 +286,18 @@ export function ItemDetailClient({ item }: { item: ItemDetail }) {
             <div className="mt-5 flex flex-col gap-3 sm:flex-row">
               <Button
                 className="flex-1"
-                onClick={startPreorder}
-                disabled={busy === "order"}
+                onClick={addToCart}
+                disabled={busy === "cart"}
               >
                 {hasOrder
                   ? "View preorder"
-                  : busy === "order"
-                    ? "Creating…"
-                    : "Start preorder"}
+                  : cartEntry
+                    ? "Go to cart"
+                    : busy === "cart"
+                      ? "Adding…"
+                      : "Add to cart"}
               </Button>
+
               <Button
                 variant="secondary"
                 className="flex-1"
@@ -300,6 +311,13 @@ export function ItemDetailClient({ item }: { item: ItemDetail }) {
                     : "Save for later"}
               </Button>
             </div>
+
+            {cartEntry && !hasOrder ? (
+              <div className="mt-3 rounded-2xl border border-[#87ef61] bg-[#87ef61]/10 p-4 text-sm text-zinc-800">
+                This item is already in your cart. Quantity:{" "}
+                <b>{cartEntry.quantity}</b>.
+              </div>
+            ) : null}
 
             {hasOrder ? (
               <div className="mt-3 rounded-2xl border border-emerald-200 bg-emerald-50 p-4 text-sm text-emerald-800">
@@ -333,6 +351,7 @@ export function ItemDetailClient({ item }: { item: ItemDetail }) {
                   </div>
                 </div>
               ))}
+
               {!item.preorder_chart?.length ? (
                 <div className="text-sm text-zinc-600">
                   No schedule provided for this item yet.
