@@ -1,0 +1,2189 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Firs' Dibs BZ | Pay half Now. Pay other half Later.</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@700;800;900&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        background-color: #f8f8f8;
+        color: #333;
+        font-family: "Poppins", sans-serif;
+        overflow-x: hidden;
+      }
+
+      /* Announcement Bar */
+      .announcement-bar {
+        background-color: #87ef61;
+        color: #0f2f63;
+        padding: 10px 0;
+        font-size: 14px;
+        font-weight: 600;
+        overflow: hidden;
+        white-space: nowrap;
+        position: relative;
+      }
+
+      .scrolling-text {
+        display: inline-block;
+        padding-left: 100%;
+        animation: scrollText 25s linear infinite;
+      }
+
+      @keyframes scrollText {
+        0% {
+          transform: translateX(0);
+        }
+        100% {
+          transform: translateX(-100%);
+        }
+      }
+
+      .announcement-highlight {
+        background-color: #0f2f63;
+        color: white;
+        padding: 2px 8px;
+        border-radius: 4px;
+        margin: 0 10px;
+        font-weight: 700;
+        animation: pulse 2s infinite;
+      }
+
+      @keyframes pulse {
+        0% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.05);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+
+      /* Main Header */
+      .main-header {
+        background-color: #0f2f63;
+        color: white;
+        padding: 15px 0;
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      }
+
+      .header-container {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        max-width: 1300px;
+        margin: 0 auto;
+        padding: 0 20px;
+      }
+
+      .logo-container {
+        display: flex;
+        align-items: center;
+        text-decoration: none;
+      }
+
+      .logo-img {
+        height: 45px;
+        width: auto;
+        margin-right: 10px;
+        filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.2));
+        transition: transform 0.3s;
+      }
+
+      .logo-img:hover {
+        transform: scale(1.05);
+      }
+
+      .logo-text {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .logo-name {
+        font-family: "Montserrat", sans-serif;
+        font-size: 24px;
+        font-weight: 900;
+        color: white;
+        line-height: 1;
+        letter-spacing: 1px;
+      }
+
+      .logo-tagline {
+        font-size: 10px;
+        font-weight: 600;
+        color: #87ef61;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        margin-top: 3px;
+      }
+
+      .search-container {
+        flex: 1;
+        max-width: 600px;
+        margin: 0 30px;
+        position: relative;
+      }
+
+      .search-input {
+        width: 100%;
+        padding: 12px 20px;
+        border-radius: 30px;
+        border: none;
+        font-size: 16px;
+        padding-left: 45px;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s;
+      }
+
+      .search-input:focus {
+        outline: none;
+        box-shadow: 0 3px 15px rgba(0, 0, 0, 0.2);
+        transform: translateY(-2px);
+      }
+
+      .search-icon {
+        position: absolute;
+        left: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #0f2f63;
+      }
+
+      .header-icons {
+        display: flex;
+        align-items: center;
+        gap: 25px;
+      }
+
+      .header-icon {
+        color: white;
+        font-size: 22px;
+        cursor: pointer;
+        position: relative;
+        transition: all 0.3s;
+      }
+
+      .header-icon:hover {
+        color: #87ef61;
+        transform: translateY(-3px);
+      }
+
+      .cart-count {
+        position: absolute;
+        top: -8px;
+        right: -8px;
+        background-color: #ff3b6d;
+        color: white;
+        font-size: 12px;
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+      }
+
+      .hamburger-menu {
+        font-size: 24px;
+        cursor: pointer;
+        transition: transform 0.3s;
+      }
+
+      .hamburger-menu:hover {
+        transform: rotate(90deg);
+      }
+
+      /* Side Navigation Menu */
+      .side-nav {
+        position: fixed;
+        top: 0;
+        right: -400px;
+        width: 350px;
+        height: 100%;
+        background-color: white;
+        box-shadow: -5px 0 25px rgba(0, 0, 0, 0.15);
+        z-index: 1000;
+        transition: right 0.4s ease;
+        overflow-y: auto;
+      }
+
+      .side-nav.active {
+        right: 0;
+      }
+
+      .nav-header {
+        background-color: #0f2f63;
+        color: white;
+        padding: 25px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .close-nav {
+        font-size: 24px;
+        cursor: pointer;
+        transition: transform 0.3s;
+      }
+
+      .close-nav:hover {
+        transform: rotate(90deg);
+      }
+
+      .nav-user {
+        padding: 20px;
+        border-bottom: 1px solid #eee;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        background: linear-gradient(135deg, #0f2f63 0%, #1a3f7a 100%);
+        color: white;
+      }
+
+      .user-avatar {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background-color: #87ef61;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #0f2f63;
+        font-size: 20px;
+        font-weight: bold;
+      }
+
+      .nav-links {
+        list-style: none;
+        padding: 15px 0;
+      }
+
+      .nav-links li {
+        border-bottom: 1px solid #eee;
+        transition: background-color 0.3s;
+      }
+
+      .nav-links li:hover {
+        background-color: rgba(15, 47, 99, 0.05);
+      }
+
+      .nav-links a {
+        display: flex;
+        align-items: center;
+        padding: 15px 20px;
+        color: #333;
+        text-decoration: none;
+        transition: all 0.3s;
+      }
+
+      .nav-links a:hover {
+        color: #0f2f63;
+        padding-left: 25px;
+      }
+
+      .nav-links i {
+        margin-right: 15px;
+        width: 20px;
+        color: #0f2f63;
+      }
+
+      .overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 999;
+        display: none;
+        animation: fadeIn 0.3s;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      .overlay.active {
+        display: block;
+      }
+
+      /* Categories Navigation */
+      .categories-nav {
+        background-color: white;
+        padding: 12px 0;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        position: sticky;
+        top: 84px;
+        z-index: 100;
+      }
+
+      .categories-container {
+        max-width: 1300px;
+        margin: 0 auto;
+        padding: 0 20px;
+        position: relative;
+      }
+
+      .scroll-btn {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        background-color: white;
+        border: 1px solid #ddd;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        z-index: 2;
+        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s;
+      }
+
+      .scroll-btn:hover {
+        background-color: #0f2f63;
+        color: white;
+        transform: translateY(-50%) scale(1.1);
+      }
+
+      .scroll-btn.left {
+        left: 5px;
+      }
+
+      .scroll-btn.right {
+        right: 5px;
+      }
+
+      .categories {
+        display: flex;
+        overflow-x: auto;
+        scroll-behavior: smooth;
+        gap: 10px;
+        padding: 5px 0;
+        scrollbar-width: none;
+      }
+
+      .categories::-webkit-scrollbar {
+        display: none;
+      }
+
+      .category-item {
+        flex: 0 0 auto;
+        padding: 8px 16px;
+        background-color: #f5f5f5;
+        border-radius: 20px;
+        font-size: 14px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.3s;
+        white-space: nowrap;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .category-item::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.4),
+          transparent
+        );
+        transition: left 0.7s;
+      }
+
+      .category-item:hover::before {
+        left: 100%;
+      }
+
+      .category-item:hover {
+        background-color: #0f2f63;
+        color: white;
+        transform: translateY(-2px);
+      }
+
+      .category-item.active {
+        background: linear-gradient(135deg, #0f2f63 0%, #1a3f7a 100%);
+        color: white;
+        box-shadow: 0 4px 10px rgba(15, 47, 99, 0.3);
+      }
+
+      /* Section Divider */
+      .section-divider {
+        max-width: 1300px;
+        margin: 40px auto;
+        padding: 0 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .divider-line {
+        height: 1px;
+        background: linear-gradient(90deg, transparent, #87ef61, transparent);
+        flex: 1;
+      }
+
+      .divider-icon {
+        margin: 0 20px;
+        color: #0f2f63;
+        font-size: 20px;
+        animation: bounce 2s infinite;
+      }
+
+      @keyframes bounce {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-5px);
+        }
+      }
+
+      /* Hero Slider */
+      .hero-slider {
+        max-width: 1300px;
+        margin: 30px auto;
+        padding: 0 20px;
+        animation: fadeInUp 0.8s ease;
+      }
+
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .slider-container {
+        position: relative;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+      }
+
+      .slide {
+        height: 450px;
+        background-size: cover;
+        background-position: center;
+        display: none;
+        position: relative;
+        animation: zoomIn 15s linear infinite;
+      }
+
+      @keyframes zoomIn {
+        0% {
+          transform: scale(1);
+        }
+        100% {
+          transform: scale(1.1);
+        }
+      }
+
+      .slide.active {
+        display: block;
+      }
+
+      .slide-content {
+        position: absolute;
+        bottom: 60px;
+        left: 60px;
+        color: white;
+        max-width: 500px;
+        background: rgba(15, 47, 99, 0.8);
+        padding: 30px;
+        border-radius: 10px;
+        backdrop-filter: blur(5px);
+        animation: slideInLeft 0.8s ease;
+      }
+
+      @keyframes slideInLeft {
+        from {
+          opacity: 0;
+          transform: translateX(-50px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+
+      .slide h2 {
+        font-size: 36px;
+        margin-bottom: 10px;
+        font-weight: 800;
+      }
+
+      .slide p {
+        font-size: 18px;
+        margin-bottom: 20px;
+        opacity: 0.9;
+      }
+
+      .shop-btn {
+        display: inline-block;
+        background: linear-gradient(135deg, #ff3b6d 0%, #ff6b95 100%);
+        color: white;
+        padding: 12px 30px;
+        border-radius: 30px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.3s;
+        box-shadow: 0 5px 15px rgba(255, 59, 109, 0.3);
+      }
+
+      .shop-btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(255, 59, 109, 0.4);
+      }
+
+      .slider-dots {
+        position: absolute;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        gap: 10px;
+      }
+
+      .dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background-color: rgba(255, 255, 255, 0.5);
+        cursor: pointer;
+        transition: all 0.3s;
+      }
+
+      .dot:hover {
+        background-color: rgba(255, 255, 255, 0.8);
+        transform: scale(1.2);
+      }
+
+      .dot.active {
+        background-color: white;
+        transform: scale(1.2);
+      }
+
+      /* CTA Section */
+      .cta-section {
+        max-width: 1300px;
+        margin: 40px auto;
+        padding: 0 20px;
+        animation: fadeInUp 0.8s ease 0.2s both;
+      }
+
+      .section-header {
+        text-align: center;
+        margin-bottom: 40px;
+      }
+
+      .section-title {
+        font-size: 36px;
+        color: #0f2f63;
+        margin-bottom: 10px;
+        font-weight: 800;
+        position: relative;
+        display: inline-block;
+      }
+
+      .section-title::after {
+        content: "";
+        position: absolute;
+        bottom: -10px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 100px;
+        height: 3px;
+        background: linear-gradient(90deg, #0f2f63, #87ef61);
+        border-radius: 3px;
+      }
+
+      .section-description {
+        color: #666;
+        font-size: 16px;
+        max-width: 700px;
+        margin: 20px auto 0;
+      }
+
+      .cta-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+        gap: 30px;
+      }
+
+      .cta-item {
+        background-color: white;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+        transition: all 0.4s;
+        text-decoration: none;
+        color: #333;
+        text-align: center;
+        padding-bottom: 20px;
+        position: relative;
+      }
+
+      .cta-item:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+      }
+
+      .cta-item::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 5px;
+        background: linear-gradient(90deg, #0f2f63, #87ef61);
+      }
+
+      .cta-image {
+        width: 140px;
+        height: 140px;
+        border-radius: 50%;
+        background-size: cover;
+        background-position: center;
+        margin: 25px auto 15px;
+        border: 5px solid #f0f0f0;
+        transition: all 0.4s;
+        overflow: hidden;
+      }
+
+      .cta-item:hover .cta-image {
+        transform: scale(1.1) rotate(5deg);
+        border-color: #87ef61;
+      }
+
+      .cta-title {
+        padding: 0 10px;
+        font-weight: 600;
+        font-size: 15px;
+        transition: color 0.3s;
+      }
+
+      .cta-item:hover .cta-title {
+        color: #0f2f63;
+      }
+
+      /* Featured Inventory Section */
+      .featured-section {
+        max-width: 1300px;
+        margin: 60px auto 40px;
+        padding: 0 20px;
+        animation: fadeInUp 0.8s ease 0.4s both;
+      }
+
+      .featured-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 25px;
+      }
+
+      .featured-title {
+        font-size: 32px;
+        color: #0f2f63;
+        font-weight: 800;
+        position: relative;
+      }
+
+      .featured-title::after {
+        content: "";
+        position: absolute;
+        bottom: -8px;
+        left: 0;
+        width: 80px;
+        height: 3px;
+        background: linear-gradient(90deg, #0f2f63, #87ef61);
+        border-radius: 3px;
+      }
+
+      .view-all {
+        color: #ff3b6d;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 16px;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        transition: all 0.3s;
+      }
+
+      .view-all:hover {
+        gap: 10px;
+        transform: translateX(5px);
+      }
+
+      .featured-container {
+        position: relative;
+        overflow: hidden;
+      }
+
+      .featured-scroll-btn {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        background-color: white;
+        border: 1px solid #ddd;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        z-index: 10;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s;
+      }
+
+      .featured-scroll-btn:hover {
+        background-color: #0f2f63;
+        color: white;
+        transform: translateY(-50%) scale(1.1);
+      }
+
+      .featured-scroll-btn.left {
+        left: -20px;
+      }
+
+      .featured-scroll-btn.right {
+        right: -20px;
+      }
+
+      .featured-items {
+        display: flex;
+        overflow-x: auto;
+        scroll-behavior: smooth;
+        gap: 20px;
+        padding: 10px 5px;
+        scrollbar-width: none;
+      }
+
+      .featured-items::-webkit-scrollbar {
+        display: none;
+      }
+
+      .featured-item {
+        flex: 0 0 auto;
+        width: 220px;
+        background-color: white;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+        transition: all 0.4s;
+        position: relative;
+      }
+
+      .featured-item:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+      }
+
+      .featured-item::before {
+        content: "HOT";
+        position: absolute;
+        top: 15px;
+        left: 15px;
+        background: linear-gradient(135deg, #ff3b6d 0%, #ff6b95 100%);
+        color: white;
+        padding: 5px 10px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 700;
+        z-index: 2;
+      }
+
+      .featured-img {
+        height: 220px;
+        background-size: cover;
+        background-position: center;
+        transition: transform 0.5s;
+      }
+
+      .featured-item:hover .featured-img {
+        transform: scale(1.05);
+      }
+
+      .featured-info {
+        padding: 20px;
+      }
+
+      .featured-name {
+        font-size: 15px;
+        font-weight: 500;
+        margin-bottom: 8px;
+        height: 40px;
+        overflow: hidden;
+        transition: color 0.3s;
+      }
+
+      .featured-item:hover .featured-name {
+        color: #0f2f63;
+      }
+
+      .featured-price {
+        font-size: 20px;
+        font-weight: 700;
+        color: #ff3b6d;
+        margin-bottom: 5px;
+      }
+
+      .original-price {
+        font-size: 14px;
+        color: #999;
+        text-decoration: line-through;
+        margin-left: 5px;
+      }
+
+      .featured-rating {
+        color: #ffc107;
+        font-size: 14px;
+        margin-bottom: 15px;
+      }
+
+      .add-to-cart {
+        display: block;
+        width: 100%;
+        background: linear-gradient(135deg, #0f2f63 0%, #1a3f7a 100%);
+        color: white;
+        border: none;
+        padding: 12px;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .add-to-cart::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.2),
+          transparent
+        );
+        transition: left 0.7s;
+      }
+
+      .add-to-cart:hover::before {
+        left: 100%;
+      }
+
+      .add-to-cart:hover {
+        background: linear-gradient(135deg, #1a3f7a 0%, #0f2f63 100%);
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(15, 47, 99, 0.3);
+      }
+
+      /* Footer */
+      .footer {
+        background: linear-gradient(135deg, #0a1f4d 0%, #0f2f63 100%);
+        color: white;
+        padding: 60px 0 20px;
+        margin-top: 80px;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .footer::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 5px;
+        background: linear-gradient(90deg, #87ef61, #ff3b6d);
+      }
+
+      .footer-container {
+        max-width: 1300px;
+        margin: 0 auto;
+        padding: 0 20px;
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 30px;
+        position: relative;
+        z-index: 1;
+      }
+
+      .footer-column h3 {
+        font-size: 18px;
+        margin-bottom: 20px;
+        position: relative;
+        padding-bottom: 10px;
+        font-weight: 700;
+      }
+
+      .footer-column h3::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 40px;
+        height: 2px;
+        background-color: #87ef61;
+      }
+
+      .footer-links {
+        list-style: none;
+      }
+
+      .footer-links li {
+        margin-bottom: 12px;
+      }
+
+      .footer-links a {
+        color: #ddd;
+        text-decoration: none;
+        transition: all 0.3s;
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .footer-links a:hover {
+        color: #87ef61;
+        transform: translateX(5px);
+      }
+
+      .footer-links i {
+        width: 20px;
+      }
+
+      .copyright {
+        text-align: center;
+        padding-top: 40px;
+        margin-top: 40px;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        font-size: 14px;
+        color: #aaa;
+        position: relative;
+        z-index: 1;
+      }
+
+      /* Responsive Design */
+      @media (max-width: 992px) {
+        .footer-container {
+          grid-template-columns: repeat(2, 1fr);
+        }
+
+        .slide-content {
+          left: 30px;
+          bottom: 30px;
+          padding: 20px;
+        }
+
+        .slide h2 {
+          font-size: 28px;
+        }
+
+        .cta-grid {
+          grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+          gap: 20px;
+        }
+      }
+
+      @media (max-width: 768px) {
+        .header-container {
+          flex-wrap: wrap;
+        }
+
+        .logo-container {
+          order: 1;
+          flex: 1;
+        }
+
+        .hamburger-menu {
+          order: 2;
+        }
+
+        .search-container {
+          order: 3;
+          flex: 100%;
+          margin: 15px 0 0 0;
+          max-width: 100%;
+        }
+
+        .header-icons {
+          order: 4;
+          margin-left: auto;
+        }
+
+        .cta-grid {
+          grid-template-columns: repeat(3, 1fr);
+        }
+
+        .side-nav {
+          width: 300px;
+        }
+
+        .featured-scroll-btn.left {
+          left: 0;
+        }
+
+        .featured-scroll-btn.right {
+          right: 0;
+        }
+
+        .slide-content {
+          left: 20px;
+          bottom: 20px;
+          padding: 15px;
+        }
+
+        .slide h2 {
+          font-size: 24px;
+        }
+
+        .slide p {
+          font-size: 16px;
+        }
+      }
+
+      @media (max-width: 576px) {
+        .cta-grid {
+          grid-template-columns: repeat(2, 1fr);
+          gap: 20px;
+        }
+
+        .cta-image {
+          width: 120px;
+          height: 120px;
+        }
+
+        .slide {
+          height: 350px;
+        }
+
+        .section-title {
+          font-size: 28px;
+        }
+
+        .featured-title {
+          font-size: 24px;
+        }
+
+        .footer-container {
+          grid-template-columns: 1fr;
+        }
+
+        .featured-item {
+          width: 200px;
+        }
+
+        .featured-img {
+          height: 200px;
+        }
+
+        .logo-name {
+          font-size: 20px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Announcement Bar -->
+    <div class="announcement-bar">
+      <div class="scrolling-text">
+        🎉
+        <span class="announcement-highlight"
+          >PAY HALF NOW. PAY OTHER HALF LATER.</span
+        >
+        - Exclusive offer for Firs' Dibs BZ members! 🎉
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 🚀 Free shipping on all orders over $75!
+        Use code: FREESHIP75 🚀 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ✨ New arrivals
+        added daily! Be the first to get the latest trends ✨
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 🔥 Flash Sale: Up to 70% OFF on selected
+        items! Limited time only! 🔥
+      </div>
+    </div>
+
+    <!-- Main Header -->
+    <header class="main-header">
+      <div class="header-container">
+        <a href="#" class="logo-container">
+          <div class="logo-img">
+            <!-- Logo image - using a div with background color as placeholder -->
+            <div
+              style="
+                width: 45px;
+                height: 45px;
+                background: linear-gradient(135deg, #87ef61 0%, #0f2f63 100%);
+                border-radius: 10px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: white;
+                font-weight: bold;
+                font-size: 20px;
+                font-family: &quot;Montserrat&quot;, sans-serif;
+              "
+            >
+              FDBZ
+            </div>
+          </div>
+          <div class="logo-text">
+            <div class="logo-name">Firs' Dibs BZ</div>
+            <div class="logo-tagline">Pay half now. Pay other half Later.</div>
+          </div>
+        </a>
+
+        <div class="search-container">
+          <i class="fas fa-search search-icon"></i>
+          <input
+            type="text"
+            class="search-input"
+            placeholder="Search for products, brands, and more..."
+          />
+        </div>
+
+        <div class="header-icons">
+          <div class="header-icon cart-icon">
+            <i class="fas fa-shopping-cart"></i>
+            <span class="cart-count">3</span>
+          </div>
+
+          <div class="header-icon">
+            <i class="fas fa-heart"></i>
+          </div>
+
+          <div class="header-icon whatsapp-icon">
+            <a
+              href="https://wa.me/15551234567?text=Hello%20Firs%27%20Dibs%20BZ%2C%20I%20would%20like%20to%20inquire%20about..."
+              target="_blank"
+              style="color: white"
+            >
+              <i class="fab fa-whatsapp"></i>
+            </a>
+          </div>
+
+          <div class="hamburger-menu" id="hamburgerMenu">
+            <i class="fas fa-bars"></i>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Side Navigation Menu -->
+    <div class="side-nav" id="sideNav">
+      <div class="nav-header">
+        <h3>My Account</h3>
+        <div class="close-nav" id="closeNav">
+          <i class="fas fa-times"></i>
+        </div>
+      </div>
+
+      <div class="nav-user">
+        <div class="user-avatar">
+          <i class="fas fa-user"></i>
+        </div>
+        <div>
+          <p>Welcome to Firs' Dibs BZ!</p>
+        </div>
+      </div>
+
+      <ul class="nav-links">
+        <li>
+          <a href="#"><i class="fas fa-box"></i> My Orders</a>
+        </li>
+        <li>
+          <a href="#"><i class="fas fa-history"></i> Recently Viewed</a>
+        </li>
+        <li>
+          <a href="#"><i class="fas fa-info-circle"></i> Request Information</a>
+        </li>
+        <li>
+          <a href="#"><i class="fab fa-whatsapp"></i> Message us on WhatsApp</a>
+        </li>
+        <li>
+          <a href="#"><i class="fas fa-undo-alt"></i> Refund Policy</a>
+        </li>
+        <li>
+          <a href="#"><i class="fas fa-star"></i> Starred Items</a>
+        </li>
+        <li>
+          <a href="#"
+            ><i class="fas fa-question-circle"></i> Frequently Asked
+            Questions</a
+          >
+        </li>
+        <li>
+          <a href="#"><i class="fas fa-share-alt"></i> Share App</a>
+        </li>
+      </ul>
+    </div>
+
+    <div class="overlay" id="overlay"></div>
+
+    <!-- Categories Navigation -->
+    <nav class="categories-nav">
+      <div class="categories-container">
+        <div class="scroll-btn left" id="scrollLeft">
+          <i class="fas fa-chevron-left"></i>
+        </div>
+
+        <div class="categories" id="categories">
+          <div class="category-item active">Women Clothing</div>
+          <div class="category-item">Beachwear</div>
+          <div class="category-item">Curve</div>
+          <div class="category-item">Kids</div>
+          <div class="category-item">Men Clothing</div>
+          <div class="category-item">Home & Living</div>
+          <div class="category-item">Underwear & Sleepwear</div>
+          <div class="category-item">Shoes</div>
+          <div class="category-item">Jewelry & Accessories</div>
+          <div class="category-item">Beauty & Health</div>
+          <div class="category-item">Home Textiles</div>
+          <div class="category-item">Cell Phone Accessories</div>
+          <div class="category-item">Electronics</div>
+          <div class="category-item">Sports & Outdoors</div>
+          <div class="category-item">Toys & Games</div>
+          <div class="category-item">Baby & Maternity</div>
+          <div class="category-item">Bags & Luggage</div>
+          <div class="category-item">Tools & Home Improvement</div>
+          <div class="category-item">Office & School Supplies</div>
+          <div class="category-item">Pet Supplies</div>
+          <div class="category-item">Appliances</div>
+        </div>
+
+        <div class="scroll-btn right" id="scrollRight">
+          <i class="fas fa-chevron-right"></i>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Section Divider -->
+    <div class="section-divider">
+      <div class="divider-line"></div>
+      <div class="divider-icon">
+        <i class="fas fa-star"></i>
+      </div>
+      <div class="divider-line"></div>
+    </div>
+
+    <!-- Hero Slider -->
+    <section class="hero-slider">
+      <div class="slider-container">
+        <div
+          class="slide active"
+          style="
+            background-image:
+              linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
+              url(&quot;file:///C:/Users/gongo/Downloads/Dark%20Blue%20Modern%20Professional%20Home%20Living%20Store%20Etsy%20Shop%20Cover.svg&quot;);
+          "
+        >
+          <div class="slide-content">
+            <h2>Summer Collection 2023</h2>
+            <p>
+              Discover the hottest trends of the season with up to 60% off.
+              Reserve now, pay later with Firs' Dibs BZ!
+            </p>
+            <a href="#" class="shop-btn">SHOP NOW</a>
+          </div>
+        </div>
+
+        <div
+          class="slide"
+          style="
+            background-image:
+              linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
+              url(&quot;file:///C:/Users/gongo/Downloads/blue%20fun%20cute%20baby%20girl%20fashion%20banner%20lanscape.svg&quot;);
+          "
+        >
+          <div class="slide-content">
+            <h2>New Arrivals Every Day</h2>
+            <p>
+              Fresh styles added daily. Don't miss out on the latest fashion. Be
+              the first to reserve!
+            </p>
+            <a href="#" class="shop-btn">EXPLORE NEW</a>
+          </div>
+        </div>
+
+        <div
+          class="slide"
+          style="
+            background-image:
+              linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
+              url(&quot;file:///C:/Users/gongo/Downloads/Yellow%20and%20White%20Modern%20Fashion%20Store%20Special%20Promo%20Summer%20Sale%20Banner.svg&quot;);
+          "
+        >
+          <div class="slide-content">
+            <h2>Flash Sale: 24 Hours Only</h2>
+            <p>
+              Up to 70% off on selected items. Limited time offer! Reserve your
+              favorites now!
+            </p>
+            <a href="#" class="shop-btn">SHOP SALE</a>
+          </div>
+        </div>
+
+        <div class="slider-dots">
+          <div class="dot active" data-slide="0"></div>
+          <div class="dot" data-slide="1"></div>
+          <div class="dot" data-slide="2"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section Divider -->
+    <div class="section-divider">
+      <div class="divider-line"></div>
+      <div class="divider-icon">
+        <i class="fas fa-shopping-bag"></i>
+      </div>
+      <div class="divider-line"></div>
+    </div>
+
+    <!-- CTA Section with Circular Images -->
+    <section class="cta-section">
+      <div class="section-header">
+        <h2 class="section-title">SHOP ALL</h2>
+        <p class="section-description">
+          Browse our wide selection of categories with circular lifestyle images
+          showcasing each category. Pay half now, pay other half later with
+          Firs' Dibs BZ!
+        </p>
+      </div>
+
+      <div class="cta-grid">
+        <!-- Women Clothing -->
+        <a href="/search/inventory/new/women%2clothing" class="cta-item">
+          <div
+            class="cta-image"
+            style="
+              background-image: url(&quot;https://img.ltwebstatic.com/images3_pi/2024/03/19/9e/17107777599287d3af5eba4a73afb438b9c26aaf3a_thumbnail_220x293.webp&quot;);
+            "
+          ></div>
+          <div class="cta-title">Women Clothing</div>
+        </a>
+
+        <!-- Beachwear -->
+        <a href="/search/inventory/new/beachwear" class="cta-item">
+          <div
+            class="cta-image"
+            style="
+              background-image: url(&quot;https://img.ltwebstatic.com/v4/j/pi/2026/01/15/9f/176847207797982349cedc21b18f5079e40e7ac917_thumbnail_220x293.webp&quot;);
+            "
+          ></div>
+          <div class="cta-title">Beachwear</div>
+        </a>
+
+        <!-- Curve -->
+        <a href="/search/inventory/new/women%20clothing" class="cta-item">
+          <div
+            class="cta-image"
+            style="
+              background-image: url(&quot;https://img.ltwebstatic.com/v4/j/pi/2025/12/29/71/176698436893c14b8c3bf02d543bf8071e3f979d62_thumbnail_220x293.webp&quot;);
+            "
+          ></div>
+          <div class="cta-title">Curve</div>
+        </a>
+
+        <!-- Kids -->
+        <a href="/search/inventory/new/kid%20clothig" class="cta-item">
+          <div
+            class="cta-image"
+            style="
+              background-image: url(&quot;https://img.kwcdn.com/product/fancy/a2e259ca-18bd-485a-960b-0b42c1216274.jpg?imageView2/2/w/800/q/70/format/avif&quot;);
+            "
+          ></div>
+          <div class="cta-title">Kids</div>
+        </a>
+
+        <!-- Men Clothing -->
+        <a href="/search/inventory/new/men%20clothing" class="cta-item">
+          <div
+            class="cta-image"
+            style="
+              background-image: url(&quot;https://img.ltwebstatic.com/images3_pi/2023/05/10/16837128616e44104a282aeb523521b1c23c4badba_thumbnail_220x293.webp&quot;);
+            "
+          ></div>
+          <div class="cta-title">Men Clothing</div>
+        </a>
+
+        <!-- Home & Living -->
+        <a href="/search/inventory/new/home%20living" class="cta-item">
+          <div
+            class="cta-image"
+            style="
+              background-image: url(&quot;https://img.ltwebstatic.com/v4/j/spmp/2025/09/15/a5/175792409316f9577b41a18eb0de7a1fa83e8fd1e5_thumbnail_220x293.webp&quot;);
+            "
+          ></div>
+          <div class="cta-title">Home & Living</div>
+        </a>
+
+        <!-- Underwear & Sleepwear -->
+        <a href="/search/inventory/new/home%20living" class="cta-item">
+          <div
+            class="cta-image"
+            style="
+              background-image: url(&quot;https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1374&q=80&quot;);
+            "
+          ></div>
+          <div class="cta-title">Underwear & Sleepwear</div>
+        </a>
+
+        <!-- Shoes -->
+        <a href="/search/inventory/new/home%20living" class="cta-item">
+          <div
+            class="cta-image"
+            style="
+              background-image: url(&quot;https://images.unsplash.com/photo-1549298916-b41d501d3772?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1412&q=80&quot;);
+            "
+          ></div>
+          <div class="cta-title">Shoes</div>
+        </a>
+
+        <!-- Jewelry & Accessories -->
+        <a href="/search/inventory/new/jewelery" class="cta-item">
+          <div
+            class="cta-image"
+            style="
+              background-image: url(&quot;https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1374&q=80&quot;);
+            "
+          ></div>
+          <div class="cta-title">Jewelry & Accessories</div>
+        </a>
+
+        <!-- Beauty & Health -->
+        <a href="/search/inventory/new/home%20living" class="cta-item">
+          <div
+            class="cta-image"
+            style="
+              background-image: url(&quot;https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1374&q=80&quot;);
+            "
+          ></div>
+          <div class="cta-title">Beauty & Health</div>
+        </a>
+
+        <!-- Home Textiles -->
+        <a href="/search/inventory/new/home%20textile" class="cta-item">
+          <div
+            class="cta-image"
+            style="
+              background-image: url(&quot;https://img.ltwebstatic.com/images3_spmp/2024/04/10/63/1712715288635069a2058dff1eb13d46d26f05a565_thumbnail_220x293.webp&quot;);
+            "
+          ></div>
+          <div class="cta-title">Home Textiles</div>
+        </a>
+
+        <!-- Cell Phone Accessories -->
+        <a href="/search/inventory/new/home%20textile" class="cta-item">
+          <div
+            class="cta-image"
+            style="
+              background-image: url(&quot;https://img.ltwebstatic.com/images3_spmp/2024/02/16/be/170806266424f321964ba9e13b5ea9d38dcdb34509_thumbnail_220x293.webp&quot;);
+            "
+          ></div>
+          <div class="cta-title">Cell Phone Accessories</div>
+        </a>
+
+        <!-- Electronics -->
+        <a href="/search/inventory/new/Electronics" class="cta-item">
+          <div
+            class="cta-image"
+            style="
+              background-image: url(&quot;https://images.unsplash.com/photo-1505740420928-5e560c06d30e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80&quot;);
+            "
+          ></div>
+          <div class="cta-title">Electronics</div>
+        </a>
+
+        <!-- Office & School Supplies -->
+        <a href="/search/inventory/new/office%20supplies" class="cta-item">
+          <div
+            class="cta-image"
+            style="
+              background-image: url(&quot;https://img.ltwebstatic.com/images3_spmp/2025/02/13/99/1739430953d98d2b8a47538c857e4e071433f057f2_thumbnail_220x293.webp&quot;);
+            "
+          ></div>
+          <div class="cta-title">Office & School Supplies</div>
+        </a>
+
+        <!-- Pet Supplies -->
+        <a href="/search/inventory/new/pet" class="cta-item">
+          <div
+            class="cta-image"
+            style="
+              background-image: url(&quot;https://img.ltwebstatic.com/v4/j/spmp/2026/01/12/3c/176820215830fc323d1228560eb039353a75944599_thumbnail_220x293.webp&quot;);
+            "
+          ></div>
+          <div class="cta-title">Pet Supplies</div>
+        </a>
+
+        <!-- Sports Supplies -->
+        <a href="/search/inventory/new/sports" class="cta-item">
+          <div
+            class="cta-image"
+            style="
+              background-image: url(&quot;https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80&quot;);
+            "
+          ></div>
+          <div class="cta-title">Sports & Outdoors</div>
+        </a>
+
+        <!-- Baby & Maternity -->
+        <a href="/search/inventory/new/Baby" class="cta-item">
+          <div
+            class="cta-image"
+            style="
+              background-image: url(&quot;https://img.ltwebstatic.com/v4/j/pi/2026/02/03/ba/1770112079007da8995827234a07459e90573770b9_thumbnail_220x293.webp&quot;);
+            "
+          ></div>
+          <div class="cta-title">Baby & Maternity</div>
+        </a>
+
+        <!-- Toy & Games -->
+        <a href="/search/inventory/new/Toy%20games" class="cta-item">
+          <div
+            class="cta-image"
+            style="
+              background-image: url(&quot;https://img.ltwebstatic.com/v4/j/spmp/2025/07/18/5e/175283117124334d8d7f46b12811261803423e0159_thumbnail_220x293.webp&quot;);
+            "
+          ></div>
+          <div class="cta-title">Toys & Games</div>
+        </a>
+      </div>
+    </section>
+
+    <!-- Section Divider -->
+    <div class="section-divider">
+      <div class="divider-line"></div>
+      <div class="divider-icon">
+        <i class="fas fa-fire"></i>
+      </div>
+      <div class="divider-line"></div>
+    </div>
+
+    <!-- Featured Inventory Section -->
+    <section class="featured-section">
+      <div class="featured-header">
+        <h2 class="featured-title">Top Items</h2>
+        <a href="#" class="view-all"
+          >View All <i class="fas fa-arrow-right"></i
+        ></a>
+      </div>
+
+      <div class="featured-container">
+        <div class="featured-scroll-btn left" id="featuredScrollLeft">
+          <i class="fas fa-chevron-left"></i>
+        </div>
+
+        <div class="featured-items" id="featuredItems">
+          <!-- Product 1 -->
+          <div class="featured-item">
+            <div
+              class="featured-img"
+              style="
+                background-image: url(&quot;https://images.unsplash.com/photo-1591047139829-d91aecb6caea?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1336&q=80&quot;);
+              "
+            ></div>
+            <div class="featured-info">
+              <div class="featured-name">
+                Floral Summer Dress with Ruffle Sleeves
+              </div>
+              <div class="featured-price">
+                $24.99 <span class="original-price">$49.99</span>
+              </div>
+
+              <button class="add-to-cart">Shop Now</button>
+            </div>
+          </div>
+
+          <!-- Product 2 -->
+          <div class="featured-item">
+            <div
+              class="featured-img"
+              style="
+                background-image: url(&quot;https://images.unsplash.com/photo-1544441893-675973e31985?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80&quot;);
+              "
+            ></div>
+            <div class="featured-info">
+              <div class="featured-name">
+                Men's Casual Slim Fit T-Shirt Pack
+              </div>
+              <div class="featured-price">$32.50</div>
+
+              <button class="add-to-cart">Shop Now</button>
+            </div>
+          </div>
+
+          <!-- Product 3 -->
+          <div class="featured-item">
+            <div
+              class="featured-img"
+              style="
+                background-image: url(&quot;https://images.unsplash.com/photo-1545291730-faff8ca1d4b0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1374&q=80&quot;);
+              "
+            ></div>
+            <div class="featured-info">
+              <div class="featured-name">
+                Wireless Bluetooth Headphones with Mic
+              </div>
+              <div class="featured-price">
+                $39.99 <span class="original-price">$79.99</span>
+              </div>
+
+              <button class="add-to-cart">Shop Now</button>
+            </div>
+          </div>
+
+          <!-- Product 4 -->
+          <div class="featured-item">
+            <div
+              class="featured-img"
+              style="
+                background-image: url(&quot;https://images.unsplash.com/photo-1552374196-1ab2a1c593e8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1374&q=80&quot;);
+              "
+            ></div>
+            <div class="featured-info">
+              <div class="featured-name">
+                Designer Handbag with Gold Chain Strap
+              </div>
+              <div class="featured-price">$45.75</div>
+
+              <button class="add-to-cart">Shop Now</button>
+            </div>
+          </div>
+
+          <!-- Product 5 -->
+          <div class="featured-item">
+            <div
+              class="featured-img"
+              style="
+                background-image: url(&quot;https://images.unsplash.com/photo-1542291026-7eec264c27ff?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80&quot;);
+              "
+            ></div>
+            <div class="featured-info">
+              <div class="featured-name">Running Sneakers with Air Cushion</div>
+              <div class="featured-price">
+                $67.99 <span class="original-price">$89.99</span>
+              </div>
+
+              <button class="add-to-cart">Shop Now</button>
+            </div>
+          </div>
+
+          <!-- Product 6 -->
+          <div class="featured-item">
+            <div
+              class="featured-img"
+              style="
+                background-image: url(&quot;https://images.unsplash.com/photo-1523381210434-271e8be1f52b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80&quot;);
+              "
+            ></div>
+            <div class="featured-info">
+              <div class="featured-name">Organic Cotton Kids Pajama Set</div>
+              <div class="featured-price">$18.50</div>
+
+              <button class="add-to-cart">Shop Now</button>
+            </div>
+          </div>
+
+          <!-- Product 7 -->
+          <div class="featured-item">
+            <div
+              class="featured-img"
+              style="
+                background-image: url(&quot;https://images.unsplash.com/photo-1558618666-fcd25c85cd64?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1374&q=80&quot;);
+              "
+            ></div>
+            <div class="featured-info">
+              <div class="featured-name">
+                Minimalist Silver Necklace with Pendant
+              </div>
+              <div class="featured-price">
+                $22.99 <span class="original-price">$34.99</span>
+              </div>
+
+              <button class="add-to-cart">Shop Now</button>
+            </div>
+          </div>
+
+          <!-- Product 8 -->
+          <div class="featured-item">
+            <div
+              class="featured-img"
+              style="
+                background-image: url(&quot;https://images.unsplash.com/photo-1511452885600-a3d2c9148a31?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1442&q=80&quot;);
+              "
+            ></div>
+            <div class="featured-info">
+              <div class="featured-name">Waterproof Beachwear Bikini Set</div>
+              <div class="featured-price">$28.75</div>
+
+              <button class="add-to-cart">Shop Now</button>
+            </div>
+          </div>
+
+          <!-- Product 9 -->
+          <div class="featured-item">
+            <div
+              class="featured-img"
+              style="
+                background-image: url(&quot;https://images.unsplash.com/photo-1596462502278-27bfdc403348?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80&quot;);
+              "
+            ></div>
+            <div class="featured-info">
+              <div class="featured-name">
+                Modern LED Desk Lamp with Touch Control
+              </div>
+              <div class="featured-price">
+                $34.99 <span class="original-price">$49.99</span>
+              </div>
+
+              <button class="add-to-cart">Shop Now</button>
+            </div>
+          </div>
+
+          <!-- Product 10 -->
+          <div class="featured-item">
+            <div
+              class="featured-img"
+              style="
+                background-image: url(&quot;https://images.unsplash.com/photo-1560769629-975ec94e6a86?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1374&q=80&quot;);
+              "
+            ></div>
+            <div class="featured-info">
+              <div class="featured-name">Gaming Mouse with RGB Lighting</div>
+              <div class="featured-price">$29.99</div>
+
+              <button class="add-to-cart">Shop Now</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="featured-scroll-btn right" id="featuredScrollRight">
+          <i class="fas fa-chevron-right"></i>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="footer-container">
+        <div class="footer-column">
+          <h3>Shop</h3>
+          <ul class="footer-links">
+            <li>
+              <a href="#"><i class="fas fa-female"></i> Women's Fashion</a>
+            </li>
+            <li>
+              <a href="#"><i class="fas fa-male"></i> Men's Fashion</a>
+            </li>
+            <li>
+              <a href="#"><i class="fas fa-child"></i> Kids & Babies</a>
+            </li>
+            <li>
+              <a href="#"><i class="fas fa-home"></i> Home & Living</a>
+            </li>
+            <li>
+              <a href="#"><i class="fas fa-laptop"></i> Electronics</a>
+            </li>
+          </ul>
+        </div>
+
+        <div class="footer-column">
+          <h3>Customer Service</h3>
+          <ul class="footer-links">
+            <li>
+              <a href="#"><i class="fas fa-phone-alt"></i> Contact Us</a>
+            </li>
+            <li>
+              <a href="#"><i class="fas fa-question-circle"></i> FAQ</a>
+            </li>
+            <li>
+              <a href="#"
+                ><i class="fas fa-shipping-fast"></i> Shipping Policy</a
+              >
+            </li>
+            <li>
+              <a href="#"><i class="fas fa-undo-alt"></i> Returns & Refunds</a>
+            </li>
+            <li>
+              <a href="#"><i class="fas fa-ruler"></i> Size Guide</a>
+            </li>
+          </ul>
+        </div>
+
+        <div class="footer-column">
+          <h3>About Firs' Dibs BZ</h3>
+          <ul class="footer-links">
+            <li>
+              <a href="#"><i class="fas fa-book-open"></i> Our Story</a>
+            </li>
+            <li>
+              <a href="#"><i class="fas fa-briefcase"></i> Careers</a>
+            </li>
+            <li>
+              <a href="#"><i class="fas fa-leaf"></i> Sustainability</a>
+            </li>
+            <li>
+              <a href="#"><i class="fas fa-newspaper"></i> Press</a>
+            </li>
+            <li>
+              <a href="#"><i class="fas fa-handshake"></i> Affiliate Program</a>
+            </li>
+          </ul>
+        </div>
+
+        <div class="footer-column">
+          <h3>Connect With Us</h3>
+          <ul class="footer-links">
+            <li>
+              <a href="#"><i class="fab fa-facebook"></i> Facebook</a>
+            </li>
+            <li>
+              <a href="#"><i class="fab fa-instagram"></i> Instagram</a>
+            </li>
+            <li>
+              <a href="#"><i class="fab fa-twitter"></i> Twitter</a>
+            </li>
+            <li>
+              <a href="#"><i class="fab fa-pinterest"></i> Pinterest</a>
+            </li>
+            <li>
+              <a href="#"><i class="fab fa-youtube"></i> YouTube</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="copyright">
+        <p>
+          &copy; 2023 Firs' Dibs BZ. All rights reserved. |
+          <a href="#" style="color: #87ef61">Privacy Policy</a> |
+          <a href="#" style="color: #87ef61">Terms of Service</a>
+        </p>
+        <p style="margin-top: 10px; font-size: 12px">
+          PAY HALF NOW. PAY OTHER HALF LATER.
+        </p>
+      </div>
+    </footer>
+
+    <script>
+      // Side Navigation Menu Toggle
+      const hamburgerMenu = document.getElementById("hamburgerMenu");
+      const sideNav = document.getElementById("sideNav");
+      const closeNav = document.getElementById("closeNav");
+      const overlay = document.getElementById("overlay");
+
+      hamburgerMenu.addEventListener("click", () => {
+        sideNav.classList.add("active");
+        overlay.classList.add("active");
+      });
+
+      closeNav.addEventListener("click", () => {
+        sideNav.classList.remove("active");
+        overlay.classList.remove("active");
+      });
+
+      overlay.addEventListener("click", () => {
+        sideNav.classList.remove("active");
+        overlay.classList.remove("active");
+      });
+
+      // Category Navigation Scroll
+      const categories = document.getElementById("categories");
+      const scrollLeft = document.getElementById("scrollLeft");
+      const scrollRight = document.getElementById("scrollRight");
+
+      scrollLeft.addEventListener("click", () => {
+        categories.scrollLeft -= 150;
+      });
+
+      scrollRight.addEventListener("click", () => {
+        categories.scrollLeft += 150;
+      });
+
+      // Featured Items Scroll with Auto Scroll
+      const featuredItems = document.getElementById("featuredItems");
+      const featuredScrollLeft = document.getElementById("featuredScrollLeft");
+      const featuredScrollRight = document.getElementById(
+        "featuredScrollRight",
+      );
+
+      featuredScrollLeft.addEventListener("click", () => {
+        featuredItems.scrollLeft -= 250;
+      });
+
+      featuredScrollRight.addEventListener("click", () => {
+        featuredItems.scrollLeft += 250;
+      });
+
+      // Auto scroll for featured items
+      let autoScrollInterval;
+      let scrollDirection = 1; // 1 for right, -1 for left
+      let isPaused = false;
+
+      function startAutoScroll() {
+        autoScrollInterval = setInterval(() => {
+          if (!isPaused) {
+            featuredItems.scrollLeft += scrollDirection * 2;
+
+            // Check if we've reached the end and change direction
+            if (
+              featuredItems.scrollLeft >=
+              featuredItems.scrollWidth - featuredItems.clientWidth - 10
+            ) {
+              scrollDirection = -1;
+            } else if (featuredItems.scrollLeft <= 10) {
+              scrollDirection = 1;
+            }
+          }
+        }, 50);
+      }
+
+      // Start auto scroll
+      startAutoScroll();
+
+      // Pause auto scroll on hover
+      featuredItems.addEventListener("mouseenter", () => {
+        isPaused = true;
+      });
+
+      featuredItems.addEventListener("mouseleave", () => {
+        isPaused = false;
+      });
+
+      // Hero Slider
+      const slides = document.querySelectorAll(".slide");
+      const dots = document.querySelectorAll(".dot");
+      let currentSlide = 0;
+
+      function showSlide(index) {
+        slides.forEach((slide) => slide.classList.remove("active"));
+        dots.forEach((dot) => dot.classList.remove("active"));
+
+        slides[index].classList.add("active");
+        dots[index].classList.add("active");
+        currentSlide = index;
+      }
+
+      dots.forEach((dot, index) => {
+        dot.addEventListener("click", () => {
+          showSlide(index);
+        });
+      });
+
+      // Auto slide every 5 seconds
+      setInterval(() => {
+        currentSlide = (currentSlide + 1) % slides.length;
+        showSlide(currentSlide);
+      }, 5000);
+
+      // Category selection
+      const categoryItems = document.querySelectorAll(".category-item");
+      categoryItems.forEach((item) => {
+        item.addEventListener("click", () => {
+          categoryItems.forEach((i) => i.classList.remove("active"));
+          item.classList.add("active");
+
+          // Add a ripple effect
+          const ripple = document.createElement("span");
+          const rect = item.getBoundingClientRect();
+          const size = Math.max(rect.width, rect.height);
+          const x = event.clientX - rect.left - size / 2;
+          const y = event.clientY - rect.top - size / 2;
+
+          ripple.style.cssText = `
+                    position: absolute;
+                    border-radius: 50%;
+                    background: rgba(255, 255, 255, 0.7);
+                    transform: scale(0);
+                    animation: ripple-animation 0.6s linear;
+                    width: ${size}px;
+                    height: ${size}px;
+                    top: ${y}px;
+                    left: ${x}px;
+                `;
+
+          item.appendChild(ripple);
+
+          setTimeout(() => {
+            ripple.remove();
+          }, 600);
+        });
+      });
+
+      // Add CSS for ripple animation
+      const style = document.createElement("style");
+      style.textContent = `
+            @keyframes ripple-animation {
+                to {
+                    transform: scale(4);
+                    opacity: 0;
+                }
+            }
+        `;
+      document.head.appendChild(style);
+
+      // Add to cart functionality
+      const addToCartButtons = document.querySelectorAll(".add-to-cart");
+      const cartCount = document.querySelector(".cart-count");
+      let cartItems = 3; // Starting with 3 items in cart
+
+      addToCartButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+          cartItems++;
+          cartCount.textContent = cartItems;
+
+          // Visual feedback
+          const originalText = button.textContent;
+          button.textContent = "Reserved!";
+          button.style.background =
+            "linear-gradient(135deg, #87ef61 0%, #6bd44f 100%)";
+
+          // Add a confetti effect
+          for (let i = 0; i < 10; i++) {
+            createConfetti(button);
+          }
+
+          setTimeout(() => {
+            button.textContent = originalText;
+            button.style.background =
+              "linear-gradient(135deg, #0f2f63 0%, #1a3f7a 100%)";
+          }, 1500);
+        });
+      });
+
+      // Confetti effect
+      function createConfetti(element) {
+        const confetti = document.createElement("div");
+        const colors = ["#ff3b6d", "#87ef61", "#0f2f63", "#ffc107", "#6f42c1"];
+        const color = colors[Math.floor(Math.random() * colors.length)];
+
+        confetti.style.cssText = `
+                position: absolute;
+                width: 8px;
+                height: 8px;
+                background-color: ${color};
+                border-radius: 50%;
+                z-index: 1000;
+                pointer-events: none;
+            `;
+
+        const rect = element.getBoundingClientRect();
+        const startX = rect.left + rect.width / 2;
+        const startY = rect.top + rect.height / 2;
+
+        confetti.style.left = `${startX}px`;
+        confetti.style.top = `${startY}px`;
+
+        document.body.appendChild(confetti);
+
+        const angle = Math.random() * Math.PI * 2;
+        const velocity = 2 + Math.random() * 2;
+        const vx = Math.cos(angle) * velocity;
+        const vy = Math.sin(angle) * velocity;
+
+        let posX = startX;
+        let posY = startY;
+        let opacity = 1;
+
+        function animate() {
+          posX += vx;
+          posY += vy;
+          vy += 0.1; // gravity
+          opacity -= 0.02;
+
+          confetti.style.left = `${posX}px`;
+          confetti.style.top = `${posY}px`;
+          confetti.style.opacity = opacity;
+
+          if (opacity > 0) {
+            requestAnimationFrame(animate);
+          } else {
+            confetti.remove();
+          }
+        }
+
+        animate();
+      }
+
+      // WhatsApp contact functionality
+      const whatsappIcon = document.querySelector(".whatsapp-icon");
+      whatsappIcon.addEventListener("click", () => {
+        const phoneNumber = "15551234567";
+        const message = "Hello Firs' Dibs BZ, I would like to inquire about...";
+        const whatsappURL = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+        window.open(whatsappURL, "_blank");
+      });
+
+      // Add scroll animation for elements when they come into view
+      const observerOptions = {
+        root: null,
+        rootMargin: "0px",
+        threshold: 0.1,
+      };
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.style.animationPlayState = "running";
+            observer.unobserve(entry.target);
+          }
+        });
+      }, observerOptions);
+
+      // Observe elements with animations
+      document
+        .querySelectorAll(".cta-section, .featured-section, .hero-slider")
+        .forEach((el) => {
+          observer.observe(el);
+        });
+    </script>
+  </body>
+</html>
