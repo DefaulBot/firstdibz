@@ -4,7 +4,6 @@ import { Suspense } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { usePathname } from "next/navigation";
 import { AnnouncementBar } from "./AnnouncementBar";
-import { Header } from "./Header";
 import { HeaderSearchWrapper } from "./HeaderSearchWrapper";
 import { AuthProvider } from "./AuthProvider";
 
