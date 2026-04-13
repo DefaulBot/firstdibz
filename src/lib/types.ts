@@ -33,6 +33,25 @@ export type ItemDetail = CatalogItem & {
   share_text?: string;
   share_link?: string;
   out_of_stock?: boolean | null;
+  // Variation options from VShop
+  variation_id?: number;
+  variation?: string;
+  variation_array?: Array<{
+    key: number;
+    id: number;
+    title: string;
+    color_url?: string;
+    not_available?: boolean | null;
+  }>;
+  has_variation_color_url?: boolean;
+  variation2_id?: number;
+  variation2?: string;
+  variation2_array?: Array<{
+    key: number;
+    id: number;
+    title: string;
+    not_available?: boolean | null;
+  }>;
 };
 
 export type OrderStatus = "preorder" | "paid" | "cancelled";

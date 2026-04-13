@@ -12,14 +12,14 @@ const messages = [
 
 export function AnnouncementBar() {
   return (
-    <div className="fixed top-0 left-0 right-0 z-[1001] overflow-hidden bg-emerald-400 text-[#0f2f63]">
+    <div className="fixed top-0 left-0 right-0 z-[1001] overflow-hidden bg-[#7FF46A] text-[#1F2661]">
       <motion.div
         initial={{ opacity: 0, y: -6 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.35 }}
         className="mx-auto flex max-w-6xl items-center gap-3 px-4 py-2 text-sm font-semibold"
       >
-        <Badge className="border-[#0f2f63]/15 bg-white/60 text-[#0f2f63]">
+        <Badge className="border-[#1F2661]/15 bg-white/60 text-[#1F2661]">
           Pay half now · Pay the rest later
         </Badge>
 

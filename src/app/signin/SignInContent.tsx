@@ -67,7 +67,11 @@ export function SignInContent() {
 
         if (data?.session) {
           setMessage("Signing in...");
-          router.push(redirect);
+          // Use await to ensure navigation completes
+          await router.push(redirect);
+        } else {
+          setError("Failed to sign in. Please try again.");
+          setBusy(false);
         }
       } catch (err: any) {
         setError(err?.message || "An error occurred");
@@ -105,32 +109,65 @@ export function SignInContent() {
         }
 
         if (data.user) {
-          const { error: updateError } = await supabase
-            .from("profiles")
-            .update({
-              first_name: firstName,
-              last_name: lastName,
-              phone_number: phoneNumber,
-              street_address: streetAddress,
-              city,
-              state_province: stateProvince,
-              postal_code: postalCode,
-              country,
-            })
-            .eq("id", data.user.id);
+          try {
+            const { error: updateError } = await supabase
+              .from("profiles")
+              .upsert(
+                {
+                  id: data.user.id,
+                  email: email.trim(),
+                  display_name: `${firstName} ${lastName}`,
+                  first_name: firstName,
+                  last_name: lastName,
+                  phone_number: phoneNumber,
+                  street_address: streetAddress,
+                  city,
+                  state_province: stateProvince,
+                  postal_code: postalCode,
+                  country,
+                },
+                {
+                  onConflict: "id",
+                },
+              );
 
-          if (updateError) {
-            setError(updateError.message);
+            if (updateError) {
+              console.error("Profile update error:", updateError);
+              setError(`Failed to create profile: ${updateError.message}`);
+              setBusy(false);
+              return;
+            }
+
+            setMessage("Account created!");
             setBusy(false);
-            return;
+            // Clear form after successful signup
+            setTimeout(() => {
+              setEmail("");
+              setPassword("");
+              setFirstName("");
+              setLastName("");
+              setPhoneNumber("");
+              setStreetAddress("");
+              setCity("");
+              setStateProvince("");
+              setPostalCode("");
+              setCountry("Belize");
+              setMode("signin");
+            }, 2000);
+          } catch (profileErr: any) {
+            console.error("Profile creation error:", profileErr);
+            setError(
+              `Failed to create profile: ${profileErr?.message || "Unknown error"}`,
+            );
+            setBusy(false);
           }
-
-          setMessage(
-            "Account created! Check your email to confirm your account.",
-          );
+        } else {
+          setError("Failed to create account. Please try again.");
+          setBusy(false);
         }
       } catch (err: any) {
-        setError(err?.message || "An error occurred");
+        console.error("Signup error:", err);
+        setError(err?.message || "An error occurred during signup");
         setBusy(false);
       }
     }

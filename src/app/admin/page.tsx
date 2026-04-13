@@ -22,7 +22,6 @@ import { formatBzd } from "@/lib/utils";
 import { OrderDetailsModal, OrderEditModal } from "@/components/OrderModals";
 import type {
   OrderStatus,
-  ProfileSummary,
   ProductSummary,
   OrdersQueryRow,
   OrderRow,
@@ -191,7 +190,10 @@ export default function AdminPage() {
         .eq("id", user.id)
         .maybeSingle();
 
-      if (adminErr) throw adminErr;
+      if (adminErr) {
+        console.error("Admin profile check error:", adminErr);
+        throw adminErr;
+      }
 
       if (!adminData?.is_admin) {
         setError("You do not have admin access.");
@@ -201,15 +203,44 @@ export default function AdminPage() {
       const { data: ordersData, error: ordersErr } = await supabase
         .from("orders")
         .select(
-          "id,status,product_id,quantity,total_amount,deposit_amount,balance_amount,amount_paid,points_earned,created_at,user_id,profiles(email,display_name)",
+          "id,status,product_id,quantity,total_amount,deposit_amount,balance_amount,amount_paid,points_earned,created_at,user_id",
         )
         .order("created_at", { ascending: false });
 
-      if (ordersErr) throw ordersErr;
+      if (ordersErr) {
+        console.error("Orders query error:", ordersErr);
+        throw ordersErr;
+      }
 
-      const normalizedOrders = (
-        (ordersData as unknown as OrdersQueryRow[] | null) ?? []
-      ).map(normalizeOrderRow);
+      // Fetch user profiles separately
+      const userIds = (ordersData as any[]).map((order) => order.user_id);
+      const { data: profilesData, error: profilesErr } = await supabase
+        .from("profiles")
+        .select("id,email,display_name")
+        .in("id", userIds);
+
+      if (profilesErr) {
+        console.error("Profiles query error:", profilesErr);
+        throw profilesErr;
+      }
+
+      const profilesMap = new Map(
+        (profilesData as any[]).map((p) => [
+          p.id,
+          { email: p.email, display_name: p.display_name },
+        ]),
+      );
+
+      const normalizedOrders = ((ordersData as any[]) ?? []).map((order) => {
+        const baseOrder = normalizeOrderRow({
+          ...order,
+          profiles: profilesMap.get(order.user_id) || null,
+        } as OrdersQueryRow);
+        return {
+          ...baseOrder,
+          profiles: profilesMap.get(order.user_id) || null,
+        };
+      });
 
       const productMap = await fetchProductsByIds(
         normalizedOrders.map((order) => order.product_id),
@@ -350,7 +381,7 @@ export default function AdminPage() {
 
   if (authLoading) {
     return (
-      <div className="rounded-[2rem] border border-zinc-200 bg-white p-8 text-sm text-zinc-600">
+      <div className="rounded-[2rem] border border-[#8C9FAE]/30 bg-white p-8 text-sm text-[#8C9FAE]">
         Loading…
       </div>
     );
@@ -358,7 +389,7 @@ export default function AdminPage() {
 
   if (!supabaseConfigured) {
     return (
-      <div className="rounded-[2rem] border border-zinc-200 bg-white p-8 text-sm text-zinc-600">
+      <div className="rounded-[2rem] border border-[#8C9FAE]/30 bg-white p-8 text-sm text-[#8C9FAE]">
         Supabase is not configured. Add <b>NEXT_PUBLIC_SUPABASE_URL</b> and{" "}
         <b>NEXT_PUBLIC_SUPABASE_ANON_KEY</b> to <b>.env.local</b>.
       </div>
@@ -382,12 +413,14 @@ export default function AdminPage() {
       <div className="flex items-center justify-between">
         <div>
           <div className="flex items-center gap-3">
-            <div className="grid h-12 w-12 place-items-center rounded-2xl bg-gradient-to-br from-blue-600 to-blue-700 text-white shadow-soft">
+            <div className="grid h-12 w-12 place-items-center rounded-2xl bg-[#1F2661] text-white shadow-soft">
               <BarChart3 className="h-6 w-6" />
             </div>
             <div>
-              <h1 className="text-2xl font-black text-zinc-900">Admin Panel</h1>
-              <p className="text-sm text-zinc-600">
+              <h1 className="text-2xl font-black text-[#1F2661]">
+                Admin Panel
+              </h1>
+              <p className="text-sm text-[#8C9FAE]">
                 Manage pre-orders and customer data
               </p>
             </div>
@@ -432,13 +465,13 @@ export default function AdminPage() {
         />
       </div>
 
-      <div className="rounded-[2rem] border border-zinc-200 bg-white p-6 shadow-sm">
+      <div className="rounded-[2rem] border border-[#8C9FAE]/30 bg-white p-6 shadow-sm">
         <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <h2 className="text-lg font-extrabold text-zinc-900">
+            <h2 className="text-lg font-extrabold text-[#1F2661]">
               All Pre-Orders
             </h2>
-            <p className="text-sm text-zinc-600">
+            <p className="text-sm text-[#8C9FAE]">
               {filteredOrders.length} orders found
             </p>
           </div>
@@ -446,7 +479,7 @@ export default function AdminPage() {
 
         <div className="mb-6 flex flex-col gap-3 sm:flex-row">
           <div className="relative flex-1">
-            <Search className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-400" />
+            <Search className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-[#8C9FAE]" />
             <Input
               placeholder="Search by email, name, product, or order ID"
               value={searchQuery}
@@ -461,7 +494,7 @@ export default function AdminPage() {
               onChange={(e) =>
                 setFilterStatus(e.target.value as "all" | OrderStatus)
               }
-              className="rounded-2xl border border-zinc-200 bg-white px-4 py-2.5 text-sm font-medium text-zinc-700 shadow-sm outline-none focus:border-[#0f2f63] focus:ring-4 focus:ring-[#0f2f63]/10"
+              className="rounded-2xl border border-[#8C9FAE]/30 bg-white px-4 py-2.5 text-sm font-medium text-[#1F2661] shadow-sm outline-none focus:border-[#1F2661] focus:ring-4 focus:ring-[#1F2661]/10"
             >
               <option value="all">All Status</option>
               <option value="preorder">Preorder</option>
@@ -472,7 +505,7 @@ export default function AdminPage() {
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value as "recent" | "amount")}
-              className="rounded-2xl border border-zinc-200 bg-white px-4 py-2.5 text-sm font-medium text-zinc-700 shadow-sm outline-none focus:border-[#0f2f63] focus:ring-4 focus:ring-[#0f2f63]/10"
+              className="rounded-2xl border border-[#8C9FAE]/30 bg-white px-4 py-2.5 text-sm font-medium text-[#1F2661] shadow-sm outline-none focus:border-[#1F2661] focus:ring-4 focus:ring-[#1F2661]/10"
             >
               <option value="recent">Recent</option>
               <option value="amount">Highest Amount</option>
@@ -487,11 +520,11 @@ export default function AdminPage() {
         ) : null}
 
         {loading ? (
-          <div className="py-8 text-center text-sm text-zinc-600">
+          <div className="py-8 text-center text-sm text-[#8C9FAE]">
             Loading orders…
           </div>
         ) : filteredOrders.length === 0 ? (
-          <div className="py-8 text-center text-sm text-zinc-600">
+          <div className="py-8 text-center text-sm text-[#8C9FAE]">
             {searchQuery || filterStatus !== "all"
               ? "No orders match your filters."
               : "No orders yet."}
@@ -612,8 +645,8 @@ function OrderRow({
   };
 
   return (
-    <div className="flex flex-col gap-4 rounded-[2rem] border border-zinc-200 bg-zinc-50 p-4 sm:flex-row sm:items-center">
-      <div className="relative aspect-square w-20 flex-shrink-0 overflow-hidden rounded-xl border border-zinc-200 bg-white sm:w-24">
+    <div className="flex flex-col gap-4 rounded-[2rem] border border-[#8C9FAE]/30 bg-[#D9EBDD]/20 p-4 sm:flex-row sm:items-center">
+      <div className="relative aspect-square w-20 flex-shrink-0 overflow-hidden rounded-xl border border-[#8C9FAE]/30 bg-white sm:w-24">
         {order.products?.image ? (
           <img
             src={order.products.image}
@@ -631,16 +664,16 @@ function OrderRow({
       <div className="min-w-0 flex-1">
         <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <div className="line-clamp-1 text-sm font-extrabold text-zinc-900">
+            <div className="line-clamp-1 text-sm font-extrabold text-[#1F2661]">
               {order.products?.title ?? `Item #${order.product_id}`}
             </div>
-            <div className="mt-1 text-xs text-zinc-600">
+            <div className="mt-1 text-xs text-[#8C9FAE]">
               Order #{order.id.slice(0, 8)} •{" "}
               {new Date(order.created_at).toLocaleDateString()}
             </div>
             {order.profiles && (
-              <div className="mt-1 text-xs text-zinc-500">
-                <span className="font-medium text-zinc-700">
+              <div className="mt-1 text-xs text-[#8C9FAE]">
+                <span className="font-medium text-[#1F2661]">
                   {order.profiles.display_name || "Unknown"}
                 </span>{" "}
                 ({order.profiles.email})
@@ -696,11 +729,11 @@ function DetailItem({
     <div
       className={`rounded-lg ${highlight ? "border border-amber-200 bg-amber-50 p-2" : "p-2"}`}
     >
-      <div className="text-xs font-bold uppercase tracking-wider text-zinc-600">
+      <div className="text-xs font-bold uppercase tracking-wider text-[#8C9FAE]">
         {label}
       </div>
       <div
-        className={`mt-1 font-extrabold ${highlight ? "text-amber-700" : "text-zinc-900"}`}
+        className={`mt-1 font-extrabold ${highlight ? "text-amber-700" : "text-[#1F2661]"}`}
       >
         {value}
       </div>

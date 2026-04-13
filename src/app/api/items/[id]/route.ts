@@ -1,16 +1,30 @@
-import { NextResponse } from 'next/server'
-import { getItem } from '@/lib/dataSource'
+import { NextResponse } from "next/server";
+import { getItem } from "@/lib/dataSource";
 
 export async function GET(_req: Request, ctx: { params: { id: string } }) {
-  const id = Number(ctx.params.id)
+  console.log("📦 API /api/items request:", { id: ctx.params.id });
+
+  const id = Number(ctx.params.id);
   if (!Number.isFinite(id)) {
-    return NextResponse.json({ error: 'Invalid id' }, { status: 400 })
+    console.warn("❌ Invalid item ID:", ctx.params.id);
+    return NextResponse.json({ error: "Invalid id" }, { status: 400 });
   }
 
-  const { item, source } = await getItem(id)
+  console.log("🔍 Fetching item details for ID:", id);
+  const { item, source } = await getItem(id);
+
+  console.log("📊 Fetch result:", {
+    found: !!item,
+    source,
+    itemId: item?.id,
+    itemTitle: item?.title,
+  });
+
   if (!item) {
-    return NextResponse.json({ error: 'Not found' }, { status: 404 })
+    console.warn("⚠️ Item not found for ID:", id);
+    return NextResponse.json({ error: "Not found" }, { status: 404 });
   }
 
-  return NextResponse.json({ source, item })
+  console.log("✅ Returning item data for ID:", id);
+  return NextResponse.json({ source, item });
 }

@@ -217,7 +217,7 @@ export default function AccountPage() {
 
   if (authLoading) {
     return (
-      <div className="rounded-[2rem] border border-zinc-200 bg-white p-8 text-sm text-zinc-600">
+      <div className="rounded-[2rem] border border-[#8C9FAE]/30 bg-white p-8 text-sm text-[#8C9FAE]">
         Loading…
       </div>
     );
@@ -225,7 +225,7 @@ export default function AccountPage() {
 
   if (!supabaseConfigured) {
     return (
-      <div className="rounded-[2rem] border border-zinc-200 bg-white p-8 text-sm text-zinc-600">
+      <div className="rounded-[2rem] border border-[#8C9FAE]/30 bg-white p-8 text-sm text-[#8C9FAE]">
         Supabase is not configured. Add <b>NEXT_PUBLIC_SUPABASE_URL</b> and{" "}
         <b>NEXT_PUBLIC_SUPABASE_ANON_KEY</b> to <b>.env.local</b>.
       </div>
@@ -235,16 +235,16 @@ export default function AccountPage() {
   return (
     <div className="grid gap-6 lg:grid-cols-12">
       <aside className="lg:col-span-4">
-        <div className="rounded-[2rem] border border-zinc-200 bg-white p-6 shadow-sm">
+        <div className="rounded-[2rem] border border-[#8C9FAE]/30 bg-white p-6 shadow-sm">
           <div className="flex items-center gap-3">
-            <div className="grid h-12 w-12 place-items-center rounded-2xl bg-[#0f2f63] text-white shadow-soft">
+            <div className="grid h-12 w-12 place-items-center rounded-2xl bg-[#1F2661] text-white shadow-soft">
               <User2 className="h-6 w-6" />
             </div>
             <div>
-              <div className="text-sm font-extrabold text-zinc-900">
+              <div className="text-sm font-extrabold text-[#1F2661]">
                 {profile?.display_name ?? "Account"}
               </div>
-              <div className="text-sm text-zinc-600">{user?.email}</div>
+              <div className="text-sm text-[#8C9FAE]">{user?.email}</div>
             </div>
           </div>
 
@@ -283,13 +283,13 @@ export default function AccountPage() {
       </aside>
 
       <section className="lg:col-span-8">
-        <div className="rounded-[2rem] border border-zinc-200 bg-white p-6 shadow-sm">
+        <div className="rounded-[2rem] border border-[#8C9FAE]/30 bg-white p-6 shadow-sm">
           <div className="flex items-center justify-between gap-4">
             <div>
-              <div className="text-lg font-extrabold text-zinc-900">
+              <div className="text-lg font-extrabold text-[#1F2661]">
                 Your preorders
               </div>
-              <div className="text-sm text-zinc-600">
+              <div className="text-sm text-[#8C9FAE]">
                 Track what’s due and what’s already paid.
               </div>
             </div>
@@ -305,13 +305,13 @@ export default function AccountPage() {
           ) : null}
 
           {loading ? (
-            <div className="mt-6 rounded-[2rem] border border-zinc-200 bg-zinc-50 p-8 text-center text-sm text-zinc-600">
+            <div className="mt-6 rounded-[2rem] border border-[#8C9FAE]/30 bg-[#D9EBDD]/30 p-8 text-center text-sm text-[#8C9FAE]">
               Loading your dashboard…
             </div>
           ) : null}
 
           {!loading && orders.length === 0 ? (
-            <div className="mt-6 rounded-[2rem] border border-zinc-200 bg-zinc-50 p-8 text-center text-sm text-zinc-600">
+            <div className="mt-6 rounded-[2rem] border border-[#8C9FAE]/30 bg-[#D9EBDD]/30 p-8 text-center text-sm text-[#8C9FAE]">
               No preorders yet.
             </div>
           ) : null}
@@ -341,9 +341,9 @@ export default function AccountPage() {
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.2 }}
-                  className="grid gap-4 rounded-[2rem] border border-zinc-200 bg-zinc-50 p-4 sm:grid-cols-12 sm:items-center"
+                  className="grid gap-4 rounded-[2rem] border border-[#8C9FAE]/30 bg-[#D9EBDD]/20 p-4 sm:grid-cols-12 sm:items-center"
                 >
-                  <div className="relative aspect-square overflow-hidden rounded-2xl border border-zinc-200 bg-white sm:col-span-3">
+                  <div className="relative aspect-square overflow-hidden rounded-2xl border border-[#8C9FAE]/30 bg-white sm:col-span-3">
                     {product?.image ? (
                       <Image
                         src={product.image}
@@ -354,14 +354,14 @@ export default function AccountPage() {
                     ) : null}
                   </div>
                   <div className="sm:col-span-6">
-                    <div className="line-clamp-2 text-sm font-extrabold text-zinc-900">
+                    <div className="line-clamp-2 text-sm font-extrabold text-[#1F2661]">
                       {product?.title ?? `Item #${order.product_id}`}
                     </div>
                     <div className="mt-1 flex flex-wrap items-center gap-2 text-sm">
-                      <span className="font-black text-[#0f2f63]">
+                      <span className="font-black text-[#1F2661]">
                         {formatBzd(Number(product?.price ?? total))}
                       </span>
-                      <span className="text-zinc-500">
+                      <span className="text-[#8C9FAE]">
                         · Item #{order.product_id}
                       </span>
                     </div>

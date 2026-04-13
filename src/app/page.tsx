@@ -100,9 +100,9 @@ export default function HomePage() {
 
       {/* Section Divider */}
       <div className="flex items-center justify-center gap-4 px-4 py-2">
-        <div className="flex-1 h-0.5 bg-gradient-to-r from-transparent via-[#0f2f63] to-transparent" />
+        <div className="flex-1 h-0.5 bg-gradient-to-r from-transparent via-[#1F2661] to-transparent" />
         <StarIcon />
-        <div className="flex-1 h-0.5 bg-gradient-to-r from-transparent via-[#0f2f63] to-transparent" />
+        <div className="flex-1 h-0.5 bg-gradient-to-r from-transparent via-[#1F2661] to-transparent" />
       </div>
 
       {/* Hero Slider */}
@@ -110,9 +110,9 @@ export default function HomePage() {
 
       {/* Section Divider */}
       <div className="flex items-center justify-center gap-4 px-4 py-2">
-        <div className="flex-1 h-0.5 bg-gradient-to-r from-transparent via-[#0f2f63] to-transparent" />
+        <div className="flex-1 h-0.5 bg-gradient-to-r from-transparent via-[#1F2661] to-transparent" />
         <ShoppingBagIcon />
-        <div className="flex-1 h-0.5 bg-gradient-to-r from-transparent via-[#0f2f63] to-transparent" />
+        <div className="flex-1 h-0.5 bg-gradient-to-r from-transparent via-[#1F2661] to-transparent" />
       </div>
 
       {/* CTA Categories Section */}
@@ -120,23 +120,23 @@ export default function HomePage() {
 
       {/* Section Divider */}
       <div className="flex items-center justify-center gap-4 px-4 py-2">
-        <div className="flex-1 h-0.5 bg-gradient-to-r from-transparent via-[#0f2f63] to-transparent" />
+        <div className="flex-1 h-0.5 bg-gradient-to-r from-transparent via-[#1F2661] to-transparent" />
         <FireIcon />
-        <div className="flex-1 h-0.5 bg-gradient-to-r from-transparent via-[#0f2f63] to-transparent" />
+        <div className="flex-1 h-0.5 bg-gradient-to-r from-transparent via-[#1F2661] to-transparent" />
       </div>
 
       {/* Featured Items Section */}
       <section className="mx-auto max-w-7xl px-4 py-4 sm:py-6">
         <div className="mb-8 flex items-center justify-between gap-4">
           <div>
-            <h2 className="text-2xl font-black text-[#0f2f63] sm:text-3xl">
+            <h2 className="text-2xl font-black text-[#1F2661] sm:text-3xl">
               Top Items
             </h2>
-            <div className="mt-1 h-1 w-20 bg-gradient-to-r from-[#0f2f63] to-[#87ef61]" />
+            <div className="mt-1 h-1 w-20 bg-gradient-to-r from-[#1F2661] to-[#7FF46A]" />
           </div>
           <Link
             href="/search"
-            className="flex items-center gap-1 text-sm font-semibold text-[#ff3b6d] transition-all hover:gap-2"
+            className="flex items-center gap-1 text-sm font-semibold text-[#7FF46A] transition-all hover:gap-2"
           >
             View All <span>→</span>
           </Link>
@@ -145,7 +145,7 @@ export default function HomePage() {
         {loading ? (
           <div className="flex items-center justify-center py-12">
             <div className="text-center">
-              <div className="mb-4 h-12 w-12 animate-spin rounded-full border-4 border-[#0f2f63] border-t-[#87ef61]" />
+              <div className="mb-4 h-12 w-12 animate-spin rounded-full border-4 border-[#1F2661] border-t-[#7FF46A]" />
               <p className="text-zinc-600">Loading items...</p>
             </div>
           </div>
@@ -265,7 +265,7 @@ function HeroSlider() {
                           : "none",
                     }}
                   >
-                    <Button className="bg-gradient-to-r from-[#ff3b6d] to-[#ff6b95] hover:shadow-lg transform hover:-translate-y-1 transition-transform">
+                    <Button className="bg-[#7FF46A] hover:bg-[#7FF46A]/90 text-[#1F2661] hover:shadow-lg transform hover:-translate-y-1 transition-transform">
                       {slide.cta}
                     </Button>
                   </Link>
@@ -312,7 +312,7 @@ function CTASection() {
       title: "Curve",
       image:
         "https://img.ltwebstatic.com/v4/j/pi/2025/12/29/71/176698436893c14b8c3bf02d543bf8071e3f979d62_thumbnail_220x293.webp",
-      link: "/search?q=curve",
+      link: "/search?q=plusesize",
     },
     {
       title: "Kids",
@@ -391,11 +391,11 @@ function CTASection() {
   return (
     <section className="mx-auto max-w-7xl px-4 py-12 sm:py-16">
       <div className="mb-12 text-center">
-        <h2 className="text-2xl sm:text-4xl font-black text-[#0f2f63] mb-4 font-montserrat">
+        <h2 className="text-2xl sm:text-4xl font-black text-[#1F2661] mb-4 font-montserrat">
           SHOP ALL CATEGORIES
         </h2>
         <div className="flex justify-center mb-4">
-          <div className="h-1 w-32 bg-gradient-to-r from-[#0f2f63] to-[#87ef61]" />
+          <div className="h-1 w-32 bg-gradient-to-r from-[#1F2661] to-[#7FF46A]" />
         </div>
         <p className="mt-4 text-zinc-600 max-w-2xl mx-auto">
           Explore our wide selection of categories. Find everything you love,
@@ -407,11 +407,11 @@ function CTASection() {
         {categories.map((category) => (
           <Link key={category.title} href={category.link} className="group">
             <div
-              className="relative rounded-2xl bg-white shadow-md hover:shadow-xl transition-all duration-300 p-4 border-t-4 border-gradient-to-r border-t-[#87ef61] hover:-translate-y-2"
+              className="relative rounded-2xl bg-white shadow-md hover:shadow-xl transition-all duration-300 p-4 border-t-4 border-gradient-to-r border-t-[#7FF46A] hover:-translate-y-2"
               style={{ boxShadow: "0 8px 20px rgba(0,0,0,0.08)" }}
             >
               {/* Circular Image */}
-              <div className="relative w-28 h-28 sm:w-32 sm:h-32 mx-auto mb-4 rounded-full overflow-hidden border-4 border-[#f0f0f0] group-hover:border-[#87ef61] transition-colors">
+              <div className="relative w-28 h-28 sm:w-32 sm:h-32 mx-auto mb-4 rounded-full overflow-hidden border-4 border-[#f0f0f0] group-hover:border-[#7FF46A] transition-colors">
                 <img
                   src={category.image}
                   alt={category.title}
@@ -420,7 +420,7 @@ function CTASection() {
               </div>
 
               {/* Title */}
-              <h3 className="font-semibold text-[#0f2f63] text-xs sm:text-sm text-center group-hover:text-[#ff3b6d] transition-colors">
+              <h3 className="font-semibold text-[#1F2661] text-xs sm:text-sm text-center group-hover:text-[#7FF46A] transition-colors">
                 {category.title}
               </h3>
             </div>
@@ -477,13 +477,13 @@ function CategoriesNav({
   };
 
   return (
-    <nav className="fixed top-[114px] left-0 right-0 z-40 bg-white border-b border-zinc-200 shadow-sm">
+    <nav className="fixed top-[114px] left-0 right-0 z-40 bg-white border-b border-[#8C9FAE]/30 shadow-sm">
       <div className="mx-auto max-w-7xl px-4">
         <div className="relative flex items-center">
           {/* Left Scroll Button */}
           <button
             onClick={() => scroll("left")}
-            className="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-white border-2 border-[#0f2f63] text-[#0f2f63] shadow-md hover:bg-[#0f2f63] hover:text-white transition-all flex items-center justify-center"
+            className="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-white border-2 border-[#1F2661] text-[#1F2661] shadow-md hover:bg-[#1F2661] hover:text-white transition-all flex items-center justify-center"
           >
             <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
               <path
@@ -510,8 +510,8 @@ function CategoriesNav({
                 }}
                 className={`flex-shrink-0 px-5 py-3 rounded-full font-semibold text-base whitespace-nowrap transition-all ${
                   selectedCategory === category
-                    ? "bg-gradient-to-r from-[#0f2f63] to-[#1a3f7a] text-white shadow-md hover:shadow-lg"
-                    : "bg-[#f5f5f5] text-[#0f2f63] hover:bg-gradient-to-r hover:from-[#0f2f63] hover:to-[#1a3f7a] hover:text-white"
+                    ? "bg-[#1F2661] text-white shadow-md hover:shadow-lg"
+                    : "bg-[#D9EBDD] text-[#1F2661] hover:bg-[#1F2661] hover:text-white"
                 }`}
               >
                 {category}
@@ -522,7 +522,7 @@ function CategoriesNav({
           {/* Right Scroll Button */}
           <button
             onClick={() => scroll("right")}
-            className="absolute right-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-white border-2 border-[#0f2f63] text-[#0f2f63] shadow-md hover:bg-[#0f2f63] hover:text-white transition-all flex items-center justify-center"
+            className="absolute right-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-white border-2 border-[#1F2661] text-[#1F2661] shadow-md hover:bg-[#1F2661] hover:text-white transition-all flex items-center justify-center"
           >
             <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
               <path

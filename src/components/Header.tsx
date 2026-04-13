@@ -64,7 +64,7 @@ export function Header({ searchParams: propsSearchParams }: HeaderProps = {}) {
 
   return (
     <>
-      <header className="fixed left-0 right-0 top-[44px] z-[1000] bg-[#0f2f63] shadow-lg">
+      <header className="fixed left-0 right-0 top-[44px] z-[1000] bg-[#1F2661] shadow-lg">
         <div className="mx-auto max-w-7xl px-4">
           <div className="flex items-center justify-between py-4">
             <Link href="/" className="flex shrink-0 items-center gap-2">
@@ -79,7 +79,7 @@ export function Header({ searchParams: propsSearchParams }: HeaderProps = {}) {
                 <div className="font-montserrat text-lg font-black leading-tight text-white">
                   Firs' Dibs BZ
                 </div>
-                <div className="text-xs font-semibold tracking-wider text-[#87ef61]">
+                <div className="text-xs font-semibold tracking-wider text-[#7FF46A]">
                   PAY HALF NOW. PAY OTHER HALF LATER.
                 </div>
               </div>
@@ -98,11 +98,11 @@ export function Header({ searchParams: propsSearchParams }: HeaderProps = {}) {
                   placeholder="Search for products, brands, and more..."
                   value={q}
                   onChange={(e) => setQ(e.target.value)}
-                  className="w-full rounded-full border-0 bg-white px-5 py-3 text-sm text-[#0f2f63] placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-[#87ef61]"
+                  className="w-full rounded-full border-0 bg-white px-5 py-3 text-sm text-[#1F2661] placeholder-[#8C9FAE] focus:outline-none focus:ring-2 focus:ring-[#7FF46A]"
                 />
                 <button
                   type="submit"
-                  className="absolute right-0 top-1/2 -translate-y-1/2 pr-4 text-[#0f2f63] transition-colors hover:text-[#87ef61]"
+                  className="absolute right-0 top-1/2 -translate-y-1/2 pr-4 text-[#1F2661] transition-colors hover:text-[#7FF46A]"
                 >
                   <Search size={18} />
                 </button>
@@ -112,26 +112,26 @@ export function Header({ searchParams: propsSearchParams }: HeaderProps = {}) {
             <nav className="hidden flex-1 items-center justify-center gap-8 lg:flex">
               <Link
                 href="/"
-                className="text-sm font-medium text-white transition-colors hover:text-[#87ef61]"
+                className="text-sm font-medium text-white transition-colors hover:text-[#7FF46A]"
               >
                 Home
               </Link>
               <Link
                 href="/search"
-                className="text-sm font-medium text-white transition-colors hover:text-[#87ef61]"
+                className="text-sm font-medium text-white transition-colors hover:text-[#7FF46A]"
               >
                 Shop
               </Link>
               <Link
                 href="/account"
-                className="text-sm font-medium text-white transition-colors hover:text-[#87ef61]"
+                className="text-sm font-medium text-white transition-colors hover:text-[#7FF46A]"
               >
                 My Account
               </Link>
               {!loading && isAdmin && (
                 <Link
                   href="/admin"
-                  className="text-sm font-medium text-white transition-colors hover:text-[#87ef61]"
+                  className="text-sm font-medium text-white transition-colors hover:text-[#7FF46A]"
                 >
                   Admin
                 </Link>
@@ -141,11 +141,11 @@ export function Header({ searchParams: propsSearchParams }: HeaderProps = {}) {
             <div className="flex items-center gap-4">
               <Link
                 href="/cart"
-                className="relative hidden p-2 text-white transition-colors hover:text-[#87ef61] sm:block"
+                className="relative hidden p-2 text-white transition-colors hover:text-[#7FF46A] sm:block"
               >
                 <ShoppingCart size={24} />
                 {cartCount > 0 ? (
-                  <span className="absolute -right-1 -top-1 inline-flex h-5 min-w-[20px] items-center justify-center rounded-full bg-[#87ef61] px-1 text-xs font-black text-[#0f2f63]">
+                  <span className="absolute -right-1 -top-1 inline-flex h-5 min-w-[20px] items-center justify-center rounded-full bg-[#7FF46A] px-1 text-xs font-black text-[#1F2661]">
                     {cartCount}
                   </span>
                 ) : null}
@@ -153,7 +153,7 @@ export function Header({ searchParams: propsSearchParams }: HeaderProps = {}) {
 
               <Link
                 href="/search"
-                className="hidden p-2 text-white transition-colors hover:text-[#87ef61] sm:block"
+                className="hidden p-2 text-white transition-colors hover:text-[#7FF46A] sm:block"
               >
                 <Heart size={24} />
               </Link>
@@ -162,14 +162,14 @@ export function Header({ searchParams: propsSearchParams }: HeaderProps = {}) {
                 href="https://wa.me/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="hidden p-2 text-white transition-colors hover:text-[#87ef61] sm:block"
+                className="hidden p-2 text-white transition-colors hover:text-[#7FF46A] sm:block"
               >
                 <MessageCircle size={24} />
               </a>
 
               <button
                 onClick={toggleSideNav}
-                className="p-2 text-white transition-colors hover:text-[#87ef61] lg:hidden"
+                className="p-2 text-white transition-colors hover:text-[#7FF46A] lg:hidden"
               >
                 {showMobileMenu ? <X size={24} /> : <Menu size={24} />}
               </button>
@@ -189,11 +189,11 @@ export function Header({ searchParams: propsSearchParams }: HeaderProps = {}) {
                 placeholder="Search for products, brands, and more..."
                 value={q}
                 onChange={(e) => setQ(e.target.value)}
-                className="w-full rounded-full border-0 bg-white px-5 py-3 text-sm text-[#0f2f63] placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-[#87ef61]"
+                className="w-full rounded-full border-0 bg-white px-5 py-3 text-sm text-[#1F2661] placeholder-[#8C9FAE] focus:outline-none focus:ring-2 focus:ring-[#7FF46A]"
               />
               <button
                 type="submit"
-                className="absolute right-0 top-1/2 -translate-y-1/2 pr-4 text-[#0f2f63]"
+                className="absolute right-0 top-1/2 -translate-y-1/2 pr-4 text-[#1F2661]"
               >
                 <Search size={18} />
               </button>
@@ -218,19 +218,19 @@ export function Header({ searchParams: propsSearchParams }: HeaderProps = {}) {
         <div className="p-6">
           <button
             onClick={() => setShowMobileMenu(false)}
-            className="absolute right-4 top-4 text-[#0f2f63]"
+            className="absolute right-4 top-4 text-[#1F2661]"
           >
             <X size={28} />
           </button>
 
           <div className="mb-8 mt-8 text-center">
-            <div className="mx-auto mb-3 flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-[#0f2f63] to-[#87ef61] text-3xl font-bold text-white">
+            <div className="mx-auto mb-3 flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-[#1F2661] to-[#7FF46A] text-3xl font-bold text-white">
               👤
             </div>
-            <h3 className="font-montserrat text-lg font-bold text-[#0f2f63]">
+            <h3 className="font-montserrat text-lg font-bold text-[#1F2661]">
               {user?.email ? user.email.split("@")[0] : "Guest User"}
             </h3>
-            <p className="text-sm text-zinc-600">Welcome to Firs' Dibs BZ</p>
+            <p className="text-sm text-[#8C9FAE]">Welcome to Firs' Dibs BZ</p>
           </div>
 
           <nav className="space-y-4">
@@ -273,7 +273,7 @@ export function Header({ searchParams: propsSearchParams }: HeaderProps = {}) {
               <Link
                 href="/signin"
                 onClick={() => setShowMobileMenu(false)}
-                className="block w-full rounded-lg bg-gradient-to-r from-[#0f2f63] to-[#1a3f7a] py-3 text-center font-semibold text-white transition-all hover:shadow-lg"
+                className="block w-full rounded-lg bg-[#1F2661] py-3 text-center font-semibold text-white transition-all hover:shadow-lg"
               >
                 Sign In
               </Link>
@@ -295,13 +295,13 @@ export function Header({ searchParams: propsSearchParams }: HeaderProps = {}) {
             <div className="space-y-3 text-sm">
               <a
                 href="/search"
-                className="block text-zinc-600 transition-colors hover:text-[#0f2f63]"
+                className="block text-[#8C9FAE] transition-colors hover:text-[#1F2661]"
               >
                 Browse Products
               </a>
               <a
                 href="/"
-                className="block text-zinc-600 transition-colors hover:text-[#0f2f63]"
+                className="block text-[#8C9FAE] transition-colors hover:text-[#1F2661]"
               >
                 About Us
               </a>
@@ -309,7 +309,7 @@ export function Header({ searchParams: propsSearchParams }: HeaderProps = {}) {
                 href="https://wa.me/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="block text-zinc-600 transition-colors hover:text-[#0f2f63]"
+                className="block text-[#8C9FAE] transition-colors hover:text-[#1F2661]"
               >
                 Contact Support
               </a>
@@ -336,7 +336,7 @@ function SideNavLink({
     <Link
       href={href}
       onClick={onClick}
-      className="block rounded-lg px-4 py-3 font-medium text-[#0f2f63] transition-all hover:bg-gradient-to-r hover:from-[#0f2f63] hover:to-[#1a3f7a] hover:text-white"
+      className="block rounded-lg px-4 py-3 font-medium text-[#1F2661] transition-all hover:bg-[#D9EBDD]"
     >
       {label}
     </Link>

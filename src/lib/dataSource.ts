@@ -82,6 +82,8 @@ export async function searchItems(params: {
  */
 export async function getItem(
   id: number,
+  variationId?: number,
+  variation2Id?: number,
 ): Promise<{ item: ItemDetail | null; source: DataSource }> {
   const mode = (process.env.VSHOP_MODE || "live").toLowerCase() as
     | "live"
@@ -89,13 +91,15 @@ export async function getItem(
 
   if (mode === "live") {
     try {
-      const live = await vshopItem(id);
+      const live = await vshopItem(id, variationId, variation2Id);
       return { item: live, source: "live" };
     } catch (error) {
-      console.error(`VShop item ${id} error:`, error);
+      console.error("VShop item fetch error:", error);
       // Fall through to fallback
     }
   }
 
-  return { item: getItemDetail(id), source: "mock" };
+  const mockItem = getItemDetail(id);
+  console.log("Fallback to mock data:", { item: mockItem, source: "mock" });
+  return { item: mockItem, source: "mock" };
 }

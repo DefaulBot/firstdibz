@@ -4,31 +4,39 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Root variables matching homepage.html */
+/* New color palette */
 :root {
   color-scheme: light;
-  --color-primary: #0f2f63;
-  --color-secondary: #87ef61;
-  --color-accent: #ff3b6d;
-  --color-light: #f8f8f8;
-  --color-text: #333;
+  --color-navy: #1F2661;
+  --color-lime: #7FF46A;
+  --color-green: #549866;
+  --color-soft: #D9EBDD;
+  --color-muted: #8C9FAE;
+  --color-white: #FFFFFF;
+  
+  /* Legacy variables for backward compatibility */
+  --color-primary: #1F2661;
+  --color-secondary: #7FF46A;
+  --color-accent: #549866;
+  --color-light: #D9EBDD;
+  --color-text: #1F2661;
 }
 
 html,
 body {
   height: 100%;
-  background-color: #f8f8f8;
-  color: #333;
+  background-color: #FFFFFF;
+  color: #1F2661;
   font-family: "Poppins", sans-serif;
   overflow-x: hidden;
 }
 
 body {
-  @apply bg-zinc-50 text-zinc-900 antialiased;
+  @apply bg-white text-[#1F2661] antialiased;
 }
 
 ::selection {
-  @apply bg-emerald-200;
+  @apply bg-[#D9EBDD];
 }
 
 /* nice scrollbars for webkit */
@@ -37,7 +45,7 @@ body {
   width: 10px;
 }
 *::-webkit-scrollbar-thumb {
-  background: rgb(161 161 170);
+  background: #8C9FAE;
   border-radius: 999px;
 }
 *::-webkit-scrollbar-track {
