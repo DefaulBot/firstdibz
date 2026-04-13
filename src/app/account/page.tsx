@@ -191,30 +191,6 @@ export default function AccountPage() {
     return { preorderCount, points };
   }, [orders.length, profile?.points]);
 
-  async function payNextDue(order: OrderRow) {
-    if (!user || !supabase) return;
-    const paid = Number(order.amount_paid);
-    const deposit = Number(order.deposit_amount);
-    const total = Number(order.total_amount);
-
-    const due =
-      paid < deposit ? deposit - paid : paid < total ? total - paid : 0;
-    if (due <= 0) return;
-
-    const { error } = await supabase.from("order_payments").insert({
-      user_id: user.id,
-      order_id: order.id,
-      amount: Number(due.toFixed(2)),
-      method: "manual",
-      note: "Dashboard payment",
-    });
-    if (error) {
-      setError(error.message);
-      return;
-    }
-    await load();
-  }
-
   if (authLoading) {
     return (
       <div className="rounded-[2rem] border border-[#8C9FAE]/30 bg-white p-8 text-sm text-[#8C9FAE]">
