@@ -38,7 +38,7 @@ export function ProductCard({
           )}
           <div className="absolute left-4 top-4 flex items-center gap-2 z-10">
             <div className="bg-[#7FF46A] text-[#1F2661] px-3 py-1 rounded-full text-xs font-bold shadow-md">
-              HOT
+              PREORDER
             </div>
           </div>
         </div>
