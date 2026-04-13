@@ -1,10 +1,8 @@
 "use client";
 
-import Link from "next/link";
 import { motion } from "framer-motion";
-import { Lock, Mail, User2 } from "lucide-react";
+import { Lock, Mail } from "lucide-react";
 import { Button } from "@/components/ui/Button";
-import { Input } from "@/components/ui/Input";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useMemo, useState } from "react";
 import { useAuth } from "@/components/AuthProvider";
@@ -12,7 +10,7 @@ import { useAuth } from "@/components/AuthProvider";
 export function SignInContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { supabase, supabaseConfigured } = useAuth();
+  const { supabase } = useAuth();
 
   const redirect = useMemo(
     () => searchParams.get("redirect") || "/account",
