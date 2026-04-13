@@ -1,6 +1,5 @@
 import type { CatalogItem, ItemDetail } from "./types";
 import { getItemDetail, searchCatalog } from "./mockData";
-import { supabaseGetItem, supabaseSearchItems } from "./supabase/data";
 import { vshopItem, vshopSearch } from "./vshop";
 
 export type DataSource = "supabase" | "live" | "mock";
