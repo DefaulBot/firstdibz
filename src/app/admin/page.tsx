@@ -35,6 +35,14 @@ type ProductImageItem = {
 };
 
 type ItemApiResponse = {
+  source?: string;
+  item?: {
+    id?: number;
+    title?: string;
+    price?: string | number | null;
+    image?: string | null;
+    images?: ProductImageItem[];
+  };
   pageProps?: {
     data?: {
       id?: number;
@@ -87,7 +95,8 @@ function normalizeItemPayload(
   payload: ItemApiResponse,
   fallbackId: number,
 ): ProductSummary | null {
-  const item = payload?.pageProps?.data;
+  // Handle both the new API format { item } and legacy format { pageProps: { data } }
+  const item = payload?.item || payload?.pageProps?.data;
   if (!item) return null;
 
   const image =

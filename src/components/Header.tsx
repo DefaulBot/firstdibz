@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState, useRef } from "react";
 import type { ReadonlyURLSearchParams } from "next/navigation";
 import logo from "@/public/logo.jpeg";
@@ -24,7 +24,6 @@ interface HeaderProps {
 export function Header({ searchParams: propsSearchParams }: HeaderProps = {}) {
   const { user, loading, signOut, supabase } = useAuth();
   const router = useRouter();
-  const pathname = usePathname();
   const hooksSearchParams = useSearchParams();
   const searchParams = propsSearchParams || hooksSearchParams;
 
@@ -66,7 +65,7 @@ export function Header({ searchParams: propsSearchParams }: HeaderProps = {}) {
     <>
       <header className="fixed left-0 right-0 top-[44px] z-[1000] bg-[#1F2661] shadow-lg">
         <div className="mx-auto max-w-7xl px-4">
-          <div className="flex items-center justify-between py-4">
+          <div className="flex items-center justify-between gap-3 py-4">
             <Link href="/" className="flex shrink-0 items-center gap-2">
               <Image
                 src={logo}
@@ -90,7 +89,7 @@ export function Header({ searchParams: propsSearchParams }: HeaderProps = {}) {
                 e.preventDefault();
                 submit();
               }}
-              className="mx-4 hidden max-w-sm flex-1 md:flex"
+              className="flex flex-1"
             >
               <div className="relative w-full">
                 <input
@@ -98,18 +97,18 @@ export function Header({ searchParams: propsSearchParams }: HeaderProps = {}) {
                   placeholder="Search for products, brands, and more..."
                   value={q}
                   onChange={(e) => setQ(e.target.value)}
-                  className="w-full rounded-full border-0 bg-white px-5 py-3 text-sm text-[#1F2661] placeholder-[#8C9FAE] focus:outline-none focus:ring-2 focus:ring-[#7FF46A]"
+                  className="w-full rounded-full border-0 bg-white px-5 py-3 pr-12 text-sm text-[#1F2661] placeholder-[#8C9FAE] focus:outline-none focus:ring-2 focus:ring-[#7FF46A]"
                 />
                 <button
                   type="submit"
-                  className="absolute right-0 top-1/2 -translate-y-1/2 pr-4 text-[#1F2661] transition-colors hover:text-[#7FF46A]"
+                  className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center justify-center p-2 text-[#1F2661] transition-colors hover:text-[#7FF46A]"
                 >
-                  <Search size={18} />
+                  <Search size={20} />
                 </button>
               </div>
             </form>
 
-            <nav className="hidden flex-1 items-center justify-center gap-8 lg:flex">
+            <nav className="hidden flex-1 items-center justify-center gap-8 lg:flex md:mx-4">
               <Link
                 href="/"
                 className="text-sm font-medium text-white transition-colors hover:text-[#7FF46A]"
@@ -138,7 +137,7 @@ export function Header({ searchParams: propsSearchParams }: HeaderProps = {}) {
               )}
             </nav>
 
-            <div className="flex items-center gap-4">
+            <div className="flex shrink-0 items-center gap-4">
               <Link
                 href="/cart"
                 className="relative hidden p-2 text-white transition-colors hover:text-[#7FF46A] sm:block"
@@ -175,30 +174,6 @@ export function Header({ searchParams: propsSearchParams }: HeaderProps = {}) {
               </button>
             </div>
           </div>
-
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              submit();
-            }}
-            className="pb-4 md:hidden"
-          >
-            <div className="relative">
-              <input
-                type="text"
-                placeholder="Search for products, brands, and more..."
-                value={q}
-                onChange={(e) => setQ(e.target.value)}
-                className="w-full rounded-full border-0 bg-white px-5 py-3 text-sm text-[#1F2661] placeholder-[#8C9FAE] focus:outline-none focus:ring-2 focus:ring-[#7FF46A]"
-              />
-              <button
-                type="submit"
-                className="absolute right-0 top-1/2 -translate-y-1/2 pr-4 text-[#1F2661]"
-              >
-                <Search size={18} />
-              </button>
-            </div>
-          </form>
         </div>
       </header>
 
