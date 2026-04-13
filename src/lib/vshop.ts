@@ -148,6 +148,14 @@ export async function vshopSearch(q: string): Promise<CatalogItem[]> {
 export function mapItemToDetail(
   data: NonNullable<NonNullable<VShopItemResponse["pageProps"]>["data"]>,
 ): ItemDetail {
+  // Calculate points_earned if not provided by API
+  const priceValue = parseMoneyValue(data.price);
+  const pointsEarned =
+    data.points_earned ?? Math.max(10, Math.round(priceValue * 2.5));
+  const pointsEarnedFormatted =
+    data.points_earned_in_dollars_formatted ??
+    toMoney("", pointsEarned * 0.01).formatted;
+
   return {
     id: data.id,
     title: data.title,
@@ -162,8 +170,8 @@ export function mapItemToDetail(
     out_of_stock: data.out_of_stock ?? null,
     current_image: data.current_image,
     images: data.images,
-    points_earned: data.points_earned,
-    points_earned_in_dollars_formatted: data.points_earned_in_dollars_formatted,
+    points_earned: pointsEarned,
+    points_earned_in_dollars_formatted: pointsEarnedFormatted,
     preorder_chart: data.preorder_chart,
     share_text: data.share_text,
     share_link: data.share_link,

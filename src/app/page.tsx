@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState, useRef } from "react";
 import { searchItems } from "@/lib/dataSource";
 import { Button } from "@/components/ui/Button";
-import { ProductGrid } from "@/components/ProductGrid";
 import { StarIcon, ShoppingBagIcon, FireIcon } from "@/components/DividerIcons";
 export default function HomePage() {
   const router = useRouter();
@@ -65,29 +64,6 @@ export default function HomePage() {
 
     loadFeatured();
   }, []);
-  const categories = [
-    "Women Clothing",
-    "Beachwear",
-    "Curve",
-    "Kids",
-    "Men Clothing",
-    "Home & Living",
-    "Underwear & Sleepwear",
-    "Shoes",
-    "Jewelry & Accessories",
-    "Beauty & Health",
-    "Home Textiles",
-    "Cell Phone Accessories",
-    "Electronics",
-    "Sports & Outdoors",
-    "Toys & Games",
-    "Baby & Maternity",
-    "Bags & Luggage",
-    "Tools & Home Improvement",
-    "Office & School Supplies",
-    "Pet Supplies",
-    "Appliances",
-  ];
 
   return (
     <div className="mt-40 md:mt-44">
@@ -608,7 +584,7 @@ function FeaturedItemsCarousel({ items }: { items: any[] }) {
           >
             {/* Badge */}
             <div className="absolute top-4 left-4 z-10 bg-gradient-to-r from-[#ff3b6d] to-[#ff6b95] text-white px-4 py-1.5 rounded-full text-xs font-bold shadow-md">
-              HOT
+              PREORDER
             </div>
 
             {/* Image */}

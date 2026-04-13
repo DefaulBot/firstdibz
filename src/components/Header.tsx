@@ -158,7 +158,7 @@ export function Header({ searchParams: propsSearchParams }: HeaderProps = {}) {
               </Link>
 
               <a
-                href="https://wa.me/"
+                href="https://wa.me/6005750"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hidden p-2 text-white transition-colors hover:text-[#7FF46A] sm:block"

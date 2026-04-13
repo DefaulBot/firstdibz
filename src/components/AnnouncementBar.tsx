@@ -4,10 +4,10 @@ import { motion } from "framer-motion";
 import { Badge } from "./ui/Badge";
 
 const messages = [
-  "🎉 PAY HALF NOW. PAY OTHER HALF LATER. - Exclusive offer for Firs' Dibs BZ members!",
-  "🚀 Free shipping on all orders over $75! Use code: FREESHIP75",
-  "✨ New arrivals added daily! Be the first to get the latest trends",
-  "🔥 Flash Sale: Up to 70% OFF on selected items! Limited time only!",
+  "🎉 PAY HALF NOW. PAY THE REST LATER. - Exclusive offer for Firs' Dibs BZ members!",
+  "🚀 Multiple shipping options available at checkout.",
+  "✨ New arrivals added daily! Be the first to get the latest trends.",
+  "🔥 Earn loyalty points on every purchase - trade for exciting rewards!",
 ];
 
 export function AnnouncementBar() {

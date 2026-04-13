@@ -61,22 +61,6 @@ export function ClientShell({ children }: { children: React.ReactNode }) {
                       href="/"
                       className="hover:text-[#7FF46A] transition-colors"
                     >
-                      Our Story
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="/"
-                      className="hover:text-[#7FF46A] transition-colors"
-                    >
-                      Press
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="/"
-                      className="hover:text-[#7FF46A] transition-colors"
-                    >
                       Careers
                     </a>
                   </li>
@@ -124,44 +108,15 @@ export function ClientShell({ children }: { children: React.ReactNode }) {
                 </ul>
               </div>
 
-              {/* Column 3 */}
+              {/* Column 3 - Hours */}
               <div>
                 <h3 className="font-montserrat font-bold text-white text-lg mb-4 pb-2 border-b-2 border-[#7FF46A] w-fit">
-                  Legal
+                  Hours
                 </h3>
                 <ul className="space-y-2 text-white/80 text-sm">
-                  <li>
-                    <a
-                      href="/"
-                      className="hover:text-[#7FF46A] transition-colors"
-                    >
-                      Privacy Policy
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="/"
-                      className="hover:text-[#7FF46A] transition-colors"
-                    >
-                      Terms & Conditions
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="/"
-                      className="hover:text-[#7FF46A] transition-colors"
-                    >
-                      Cookie Policy
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="/"
-                      className="hover:text-[#7FF46A] transition-colors"
-                    >
-                      Disclaimer
-                    </a>
-                  </li>
+                  <li>Monday - Friday: 10:00 a.m - 5:30 p.m</li>
+                  <li>Saturday: 10:00 a.m - 3:00 p.m</li>
+                  <li>Sunday: Closed</li>
                 </ul>
               </div>
 
@@ -173,7 +128,9 @@ export function ClientShell({ children }: { children: React.ReactNode }) {
                 <ul className="space-y-2 text-white/80 text-sm">
                   <li>
                     <a
-                      href="/"
+                      href="https://www.instagram.com/firs_dibz?igsh=d254b25iajE3dHR6"
+                      target="_blank"
+                      rel="noopener noreferrer"
                       className="hover:text-[#7FF46A] transition-colors"
                     >
                       Instagram
@@ -181,7 +138,9 @@ export function ClientShell({ children }: { children: React.ReactNode }) {
                   </li>
                   <li>
                     <a
-                      href="/"
+                      href="https://wa.me/6005750"
+                      target="_blank"
+                      rel="noopener noreferrer"
                       className="hover:text-[#7FF46A] transition-colors"
                     >
                       WhatsApp
