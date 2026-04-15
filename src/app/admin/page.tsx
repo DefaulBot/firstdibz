@@ -279,13 +279,13 @@ export default function AdminPage() {
 
     // Load unread message count separately so it doesn't block orders
     try {
-      const { count, error: msgErr } = await supabase
+      const { data: msgData, error: msgErr } = await supabase
         .from("contact_messages")
-        .select("id", { count: "exact", head: true })
+        .select("id")
         .is("read_at", null);
 
-      if (!msgErr) {
-        setUnreadMsgCount(count ?? 0);
+      if (!msgErr && msgData) {
+        setUnreadMsgCount(msgData.length);
       }
     } catch {
       // Table may not exist yet — silently ignore
