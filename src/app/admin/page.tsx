@@ -269,20 +269,26 @@ export default function AdminPage() {
       }));
 
       setOrders(mergedOrders);
-
-      // Load unread message count
-      const { count } = await supabase
-        .from("contact_messages")
-        .select("id", { count: "exact", head: true })
-        .is("read_at", null);
-
-      setUnreadMsgCount(count ?? 0);
     } catch (e: unknown) {
       const message =
         e instanceof Error ? e.message : "Failed to load admin panel";
       setError(message);
     } finally {
       setLoading(false);
+    }
+
+    // Load unread message count separately so it doesn't block orders
+    try {
+      const { count, error: msgErr } = await supabase
+        .from("contact_messages")
+        .select("id", { count: "exact", head: true })
+        .is("read_at", null);
+
+      if (!msgErr) {
+        setUnreadMsgCount(count ?? 0);
+      }
+    } catch {
+      // Table may not exist yet — silently ignore
     }
   }
 
