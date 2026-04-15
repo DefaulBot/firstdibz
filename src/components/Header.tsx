@@ -275,15 +275,25 @@ export function Header({ searchParams: propsSearchParams }: HeaderProps = {}) {
                 Browse Products
               </a>
               <a
-                href="/"
+                href="/about"
                 className="block text-[#8C9FAE] transition-colors hover:text-[#1F2661]"
               >
                 About Us
               </a>
               <a
-                href="https://wa.me/"
-                target="_blank"
-                rel="noopener noreferrer"
+                href="/rewards"
+                className="block text-[#8C9FAE] transition-colors hover:text-[#1F2661]"
+              >
+                Rewards & Points
+              </a>
+              <a
+                href="/faq"
+                className="block text-[#8C9FAE] transition-colors hover:text-[#1F2661]"
+              >
+                FAQ
+              </a>
+              <a
+                href="/contact"
                 className="block text-[#8C9FAE] transition-colors hover:text-[#1F2661]"
               >
                 Contact Support

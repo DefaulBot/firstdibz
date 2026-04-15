@@ -8,6 +8,7 @@ CREATE TABLE IF NOT EXISTS public.contact_messages (
   email varchar(255) NOT NULL,
   phone varchar(20),
   message text NOT NULL,
+  read_at timestamp with time zone DEFAULT NULL,
   created_at timestamp with time zone DEFAULT NOW()
 );
 
@@ -25,6 +26,30 @@ CREATE POLICY "service_role_insert_contact_messages"
 CREATE POLICY "admins_read_contact_messages"
   ON public.contact_messages
   FOR SELECT
+  USING (
+    EXISTS (
+      SELECT 1 FROM public.profiles
+      WHERE profiles.id = auth.uid()
+        AND profiles.is_admin = true
+    )
+  );
+
+-- Admins can update contact messages (mark as read)
+CREATE POLICY "admins_update_contact_messages"
+  ON public.contact_messages
+  FOR UPDATE
+  USING (
+    EXISTS (
+      SELECT 1 FROM public.profiles
+      WHERE profiles.id = auth.uid()
+        AND profiles.is_admin = true
+    )
+  );
+
+-- Admins can delete contact messages
+CREATE POLICY "admins_delete_contact_messages"
+  ON public.contact_messages
+  FOR DELETE
   USING (
     EXISTS (
       SELECT 1 FROM public.profiles

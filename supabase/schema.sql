@@ -419,6 +419,7 @@ CREATE TABLE IF NOT EXISTS public.contact_messages (
   email varchar(255) NOT NULL,
   phone varchar(20),
   message text NOT NULL,
+  read_at timestamp with time zone DEFAULT NULL,
   created_at timestamp with time zone DEFAULT NOW()
 );
 
@@ -441,5 +442,27 @@ CREATE POLICY "admins_read_contact_messages"
     )
   );
 
+CREATE POLICY "admins_update_contact_messages"
+  ON public.contact_messages
+  FOR UPDATE
+  USING (
+    EXISTS (
+      SELECT 1 FROM public.profiles
+      WHERE profiles.id = auth.uid()
+        AND profiles.is_admin = true
+    )
+  );
+
+CREATE POLICY "admins_delete_contact_messages"
+  ON public.contact_messages
+  FOR DELETE
+  USING (
+    EXISTS (
+      SELECT 1 FROM public.profiles
+      WHERE profiles.id = auth.uid()
+        AND profiles.is_admin = true
+    )
+  );
+
 GRANT INSERT ON public.contact_messages TO service_role;
-GRANT SELECT ON public.contact_messages TO authenticated;
+GRANT SELECT, UPDATE, DELETE ON public.contact_messages TO authenticated;

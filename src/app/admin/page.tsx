@@ -13,6 +13,8 @@ import {
   CheckCircle,
   Clock,
   AlertCircle,
+  Mail,
+  Users,
 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
@@ -20,12 +22,16 @@ import { Input } from "@/components/ui/Input";
 import { useAuth } from "@/components/AuthProvider";
 import { formatBzd } from "@/lib/utils";
 import { OrderDetailsModal, OrderEditModal } from "@/components/OrderModals";
+import { AdminMessages } from "@/components/AdminMessages";
+import { AdminCustomers } from "@/components/AdminCustomers";
 import type {
   OrderStatus,
   ProductSummary,
   OrdersQueryRow,
   OrderRow,
 } from "@/lib/types";
+
+type AdminTab = "orders" | "messages" | "customers";
 
 type ProductImageItem = {
   key?: number;
@@ -185,6 +191,8 @@ export default function AdminPage() {
   const [showDetailsModal, setShowDetailsModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
+  const [activeTab, setActiveTab] = useState<AdminTab>("orders");
+  const [unreadMsgCount, setUnreadMsgCount] = useState(0);
 
   async function load() {
     if (!user || !supabase) return;
@@ -261,6 +269,14 @@ export default function AdminPage() {
       }));
 
       setOrders(mergedOrders);
+
+      // Load unread message count
+      const { count } = await supabase
+        .from("contact_messages")
+        .select("id", { count: "exact", head: true })
+        .is("read_at", null);
+
+      setUnreadMsgCount(count ?? 0);
     } catch (e: unknown) {
       const message =
         e instanceof Error ? e.message : "Failed to load admin panel";
@@ -447,7 +463,7 @@ export default function AdminPage() {
         </Button>
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
         <StatCard
           icon={<ShoppingCart className="h-5 w-5" />}
           label="Total Orders"
@@ -472,97 +488,163 @@ export default function AdminPage() {
           value={formatBzd(stats.avgOrder)}
           color="purple"
         />
+        <StatCard
+          icon={<Mail className="h-5 w-5" />}
+          label="Unread Messages"
+          value={String(unreadMsgCount)}
+          color={unreadMsgCount > 0 ? "amber" : "blue"}
+        />
       </div>
 
-      <div className="rounded-[2rem] border border-[#8C9FAE]/30 bg-white p-6 shadow-sm">
-        <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          <div>
-            <h2 className="text-lg font-extrabold text-[#1F2661]">
-              All Pre-Orders
-            </h2>
-            <p className="text-sm text-[#8C9FAE]">
-              {filteredOrders.length} orders found
-            </p>
-          </div>
-        </div>
+      {/* Tab bar */}
+      <div className="flex gap-2 rounded-2xl bg-[#f0f6ff] p-1.5">
+        {(
+          [
+            {
+              key: "orders",
+              label: "Orders",
+              icon: <ShoppingCart className="h-4 w-4" />,
+            },
+            {
+              key: "messages",
+              label: "Messages",
+              icon: <Mail className="h-4 w-4" />,
+              badge: unreadMsgCount > 0 ? unreadMsgCount : undefined,
+            },
+            {
+              key: "customers",
+              label: "Customers",
+              icon: <Users className="h-4 w-4" />,
+            },
+          ] as {
+            key: AdminTab;
+            label: string;
+            icon: ReactNode;
+            badge?: number;
+          }[]
+        ).map((tab) => (
+          <button
+            key={tab.key}
+            onClick={() => setActiveTab(tab.key)}
+            className={`flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold transition-all ${
+              activeTab === tab.key
+                ? "bg-white text-[#1F2661] shadow-sm"
+                : "text-[#8C9FAE] hover:text-[#1F2661]"
+            }`}
+          >
+            {tab.icon}
+            {tab.label}
+            {tab.badge != null && (
+              <span className="ml-1 inline-flex h-5 min-w-[20px] items-center justify-center rounded-full bg-[#ff4676] px-1.5 text-[10px] font-bold text-white">
+                {tab.badge}
+              </span>
+            )}
+          </button>
+        ))}
+      </div>
 
-        <div className="mb-6 flex flex-col gap-3 sm:flex-row">
-          <div className="relative flex-1">
-            <Search className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-[#8C9FAE]" />
-            <Input
-              placeholder="Search by email, name, product, or order ID"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-11"
-            />
+      {/* Tab content */}
+      {activeTab === "messages" && supabase && (
+        <AdminMessages supabase={supabase} />
+      )}
+
+      {activeTab === "customers" && supabase && (
+        <AdminCustomers supabase={supabase} />
+      )}
+
+      {activeTab === "orders" && (
+        <div className="rounded-[2rem] border border-[#8C9FAE]/30 bg-white p-6 shadow-sm">
+          <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <h2 className="text-lg font-extrabold text-[#1F2661]">
+                All Pre-Orders
+              </h2>
+              <p className="text-sm text-[#8C9FAE]">
+                {filteredOrders.length} orders found
+              </p>
+            </div>
           </div>
 
-          <div className="flex gap-2">
-            <select
-              value={filterStatus}
-              onChange={(e) =>
-                setFilterStatus(e.target.value as "all" | OrderStatus)
-              }
-              className="rounded-2xl border border-[#8C9FAE]/30 bg-white px-4 py-2.5 text-sm font-medium text-[#1F2661] shadow-sm outline-none focus:border-[#1F2661] focus:ring-4 focus:ring-[#1F2661]/10"
-            >
-              <option value="all">All Status</option>
-              <option value="preorder">Preorder</option>
-              <option value="paid">Paid</option>
-              <option value="cancelled">Cancelled</option>
-            </select>
+          <div className="mb-6 flex flex-col gap-3 sm:flex-row">
+            <div className="relative flex-1">
+              <Search className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-[#8C9FAE]" />
+              <Input
+                placeholder="Search by email, name, product, or order ID"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-11"
+              />
+            </div>
 
-            <select
-              value={sortBy}
-              onChange={(e) => setSortBy(e.target.value as "recent" | "amount")}
-              className="rounded-2xl border border-[#8C9FAE]/30 bg-white px-4 py-2.5 text-sm font-medium text-[#1F2661] shadow-sm outline-none focus:border-[#1F2661] focus:ring-4 focus:ring-[#1F2661]/10"
-            >
-              <option value="recent">Recent</option>
-              <option value="amount">Highest Amount</option>
-            </select>
-          </div>
-        </div>
-
-        {error && error !== "You do not have admin access." ? (
-          <div className="rounded-2xl border border-red-200 bg-red-50 p-4 text-sm text-red-700">
-            {error}
-          </div>
-        ) : null}
-
-        {loading ? (
-          <div className="py-8 text-center text-sm text-[#8C9FAE]">
-            Loading orders…
-          </div>
-        ) : filteredOrders.length === 0 ? (
-          <div className="py-8 text-center text-sm text-[#8C9FAE]">
-            {searchQuery || filterStatus !== "all"
-              ? "No orders match your filters."
-              : "No orders yet."}
-          </div>
-        ) : (
-          <div className="space-y-3 overflow-x-auto">
-            {filteredOrders.map((order, idx) => (
-              <motion.div
-                key={order.id}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: idx * 0.05 }}
+            <div className="flex gap-2">
+              <select
+                value={filterStatus}
+                onChange={(e) =>
+                  setFilterStatus(e.target.value as "all" | OrderStatus)
+                }
+                className="rounded-2xl border border-[#8C9FAE]/30 bg-white px-4 py-2.5 text-sm font-medium text-[#1F2661] shadow-sm outline-none focus:border-[#1F2661] focus:ring-4 focus:ring-[#1F2661]/10"
               >
-                <OrderRow
-                  order={order}
-                  onEdit={(nextOrder) => {
-                    setSelectedOrder(nextOrder);
-                    setShowEditModal(true);
-                  }}
-                  onDetails={(nextOrder) => {
-                    setSelectedOrder(nextOrder);
-                    setShowDetailsModal(true);
-                  }}
-                />
-              </motion.div>
-            ))}
+                <option value="all">All Status</option>
+                <option value="preorder">Preorder</option>
+                <option value="paid">Paid</option>
+                <option value="cancelled">Cancelled</option>
+              </select>
+
+              <select
+                value={sortBy}
+                onChange={(e) =>
+                  setSortBy(e.target.value as "recent" | "amount")
+                }
+                className="rounded-2xl border border-[#8C9FAE]/30 bg-white px-4 py-2.5 text-sm font-medium text-[#1F2661] shadow-sm outline-none focus:border-[#1F2661] focus:ring-4 focus:ring-[#1F2661]/10"
+              >
+                <option value="recent">Recent</option>
+                <option value="amount">Highest Amount</option>
+              </select>
+            </div>
           </div>
-        )}
-      </div>
+
+          {error && error !== "You do not have admin access." ? (
+            <div className="rounded-2xl border border-red-200 bg-red-50 p-4 text-sm text-red-700">
+              {error}
+            </div>
+          ) : null}
+
+          {loading ? (
+            <div className="py-8 text-center text-sm text-[#8C9FAE]">
+              Loading orders…
+            </div>
+          ) : filteredOrders.length === 0 ? (
+            <div className="py-8 text-center text-sm text-[#8C9FAE]">
+              {searchQuery || filterStatus !== "all"
+                ? "No orders match your filters."
+                : "No orders yet."}
+            </div>
+          ) : (
+            <div className="space-y-3 overflow-x-auto">
+              {filteredOrders.map((order, idx) => (
+                <motion.div
+                  key={order.id}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: idx * 0.05 }}
+                >
+                  <OrderRow
+                    order={order}
+                    onEdit={(nextOrder) => {
+                      setSelectedOrder(nextOrder);
+                      setShowEditModal(true);
+                    }}
+                    onDetails={(nextOrder) => {
+                      setSelectedOrder(nextOrder);
+                      setShowDetailsModal(true);
+                    }}
+                  />
+                </motion.div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
 
       <OrderDetailsModal
         isOpen={showDetailsModal}
@@ -596,20 +678,22 @@ function StatCard({
   icon: ReactNode;
   label: string;
   value: string;
-  color: "blue" | "emerald" | "green" | "purple";
+  color: "blue" | "emerald" | "green" | "purple" | "amber";
 }) {
-  const colorMap = {
+  const colorMap: Record<string, string> = {
     blue: "border-blue-200 bg-blue-50 text-blue-700",
     emerald: "border-emerald-200 bg-emerald-50 text-emerald-700",
     green: "border-green-200 bg-green-50 text-green-700",
     purple: "border-purple-200 bg-purple-50 text-purple-700",
+    amber: "border-amber-200 bg-amber-50 text-amber-700",
   };
 
-  const iconColorMap = {
+  const iconColorMap: Record<string, string> = {
     blue: "text-blue-600",
     emerald: "text-emerald-600",
     green: "text-green-600",
     purple: "text-purple-600",
+    amber: "text-amber-600",
   };
 
   return (
