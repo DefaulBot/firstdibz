@@ -431,6 +431,12 @@ CREATE POLICY "service_role_insert_contact_messages"
   TO service_role
   WITH CHECK (true);
 
+CREATE POLICY "anon_insert_contact_messages"
+  ON public.contact_messages
+  FOR INSERT
+  TO anon
+  WITH CHECK (true);
+
 CREATE POLICY "admins_read_contact_messages"
   ON public.contact_messages
   FOR SELECT

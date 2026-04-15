@@ -22,6 +22,13 @@ CREATE POLICY "service_role_insert_contact_messages"
   TO service_role
   WITH CHECK (true);
 
+-- Anon role can insert (contact form from unauthenticated visitors)
+CREATE POLICY "anon_insert_contact_messages"
+  ON public.contact_messages
+  FOR INSERT
+  TO anon
+  WITH CHECK (true);
+
 -- Admins can read contact messages
 CREATE POLICY "admins_read_contact_messages"
   ON public.contact_messages
