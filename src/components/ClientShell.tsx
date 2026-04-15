@@ -49,7 +49,7 @@ export function ClientShell({ children }: { children: React.ReactNode }) {
                 <ul className="space-y-2 text-white/80 text-sm">
                   <li>
                     <a
-                      href="/"
+                      href="/about"
                       className="hover:text-[#7FF46A] transition-colors"
                     >
                       About Firs' Dibs BZ
@@ -57,10 +57,18 @@ export function ClientShell({ children }: { children: React.ReactNode }) {
                   </li>
                   <li>
                     <a
-                      href="/"
+                      href="/careers"
                       className="hover:text-[#7FF46A] transition-colors"
                     >
                       Careers
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      href="/rewards"
+                      className="hover:text-[#7FF46A] transition-colors"
+                    >
+                      Rewards & Points
                     </a>
                   </li>
                 </ul>
@@ -74,7 +82,7 @@ export function ClientShell({ children }: { children: React.ReactNode }) {
                 <ul className="space-y-2 text-white/80 text-sm">
                   <li>
                     <a
-                      href="/"
+                      href="/contact"
                       className="hover:text-[#7FF46A] transition-colors"
                     >
                       Contact Us
@@ -82,7 +90,7 @@ export function ClientShell({ children }: { children: React.ReactNode }) {
                   </li>
                   <li>
                     <a
-                      href="/"
+                      href="/faq"
                       className="hover:text-[#7FF46A] transition-colors"
                     >
                       FAQ
@@ -90,7 +98,7 @@ export function ClientShell({ children }: { children: React.ReactNode }) {
                   </li>
                   <li>
                     <a
-                      href="/"
+                      href="/shipping"
                       className="hover:text-[#7FF46A] transition-colors"
                     >
                       Shipping Info
@@ -98,10 +106,18 @@ export function ClientShell({ children }: { children: React.ReactNode }) {
                   </li>
                   <li>
                     <a
-                      href="/"
+                      href="/returns"
                       className="hover:text-[#7FF46A] transition-colors"
                     >
                       Returns
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      href="/payment-methods"
+                      className="hover:text-[#7FF46A] transition-colors"
+                    >
+                      Payment Methods
                     </a>
                   </li>
                 </ul>

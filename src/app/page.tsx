@@ -482,7 +482,9 @@ function CategoriesNav({
                 onClick={() => {
                   onSelectCategory(category);
                   const query = category.toLowerCase().replace(/\s+/g, "+");
-                  router.push(`/search?q=${query}`);
+                  router.push(
+                    `/search?q=${query == "curve" ? "plusesize" : query}`,
+                  );
                 }}
                 className={`flex-shrink-0 px-5 py-3 rounded-full font-semibold text-base whitespace-nowrap transition-all ${
                   selectedCategory === category

@@ -408,3 +408,38 @@ GRANT SELECT, INSERT, DELETE ON public.saved_items TO authenticated;
 GRANT SELECT ON public.products TO anon;
 GRANT SELECT ON public.product_images TO anon;
 GRANT SELECT ON public.product_preorder_chart TO anon;
+
+-- ============================================
+-- CONTACT MESSAGES TABLE
+-- ============================================
+CREATE TABLE IF NOT EXISTS public.contact_messages (
+  id uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
+  first_name varchar(255) NOT NULL,
+  last_name varchar(255) NOT NULL,
+  email varchar(255) NOT NULL,
+  phone varchar(20),
+  message text NOT NULL,
+  created_at timestamp with time zone DEFAULT NOW()
+);
+
+ALTER TABLE public.contact_messages ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "service_role_insert_contact_messages"
+  ON public.contact_messages
+  FOR INSERT
+  TO service_role
+  WITH CHECK (true);
+
+CREATE POLICY "admins_read_contact_messages"
+  ON public.contact_messages
+  FOR SELECT
+  USING (
+    EXISTS (
+      SELECT 1 FROM public.profiles
+      WHERE profiles.id = auth.uid()
+        AND profiles.is_admin = true
+    )
+  );
+
+GRANT INSERT ON public.contact_messages TO service_role;
+GRANT SELECT ON public.contact_messages TO authenticated;
