@@ -233,7 +233,7 @@ export default function AdminPage() {
       const userIds = (ordersData as any[]).map((order) => order.user_id);
       const { data: profilesData, error: profilesErr } = await supabase
         .from("profiles")
-        .select("id,email,display_name")
+        .select("id,email,display_name,phone_number")
         .in("id", userIds);
 
       if (profilesErr) {
@@ -244,7 +244,11 @@ export default function AdminPage() {
       const profilesMap = new Map(
         (profilesData as any[]).map((p) => [
           p.id,
-          { email: p.email, display_name: p.display_name },
+          {
+            email: p.email,
+            display_name: p.display_name,
+            phone_number: p.phone_number,
+          },
         ]),
       );
 
@@ -776,6 +780,19 @@ function OrderRow({
                   {order.profiles.display_name || "Unknown"}
                 </span>{" "}
                 ({order.profiles.email})
+                {order.profiles.phone_number && (
+                  <>
+                    {" · "}
+                    <a
+                      href={`https://wa.me/${order.profiles.phone_number.replace(/[^0-9]/g, "")}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="font-medium text-[#1F2661] hover:text-[#7FF46A] transition-colors"
+                    >
+                      📱 {order.profiles.phone_number}
+                    </a>
+                  </>
+                )}
               </div>
             )}
           </div>
@@ -788,11 +805,7 @@ function OrderRow({
           </Badge>
         </div>
 
-        <div className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-4">
-          <DetailItem
-            label="Price"
-            value={formatBzd(order.products?.price ?? total)}
-          />
+        <div className="mt-3 grid grid-cols-3 gap-3">
           <DetailItem label="Total" value={formatBzd(total)} />
           <DetailItem label="Paid" value={formatBzd(paid)} />
           <DetailItem

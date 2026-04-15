@@ -59,6 +59,7 @@ export type OrderStatus = "preorder" | "paid" | "cancelled";
 export type ProfileSummary = {
   email: string | null;
   display_name: string | null;
+  phone_number: string | null;
 };
 
 export type ProductSummary = {
