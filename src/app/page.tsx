@@ -4,7 +4,6 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState, useRef } from "react";
 import { searchItems } from "@/lib/dataSource";
-import { Button } from "@/components/ui/Button";
 import { StarIcon, ShoppingBagIcon, FireIcon } from "@/components/DividerIcons";
 export default function HomePage() {
   const router = useRouter();
@@ -66,7 +65,7 @@ export default function HomePage() {
   }, []);
 
   return (
-    <div className="mt-40 md:mt-44">
+    <div>
       {/* Categories Navigation */}
       <CategoriesNav
         selectedCategory={selectedCategory}
@@ -139,130 +138,186 @@ export default function HomePage() {
 
 function HeroSlider() {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [isHovered, setIsHovered] = useState(false);
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const slides = [
     {
-      title: "Summer Collection 2024",
-      description:
-        "Discover the hottest trends of the season with up to 60% off. Reserve now, pay later with Firs' Dibs BZ!",
-      cta: "SHOP NOW",
-      bgImage:
-        "url('https://images.pexels.com/photos/3962286/pexels-photo-3962286.jpeg?auto=compress&cs=tinysrgb&w=1600')",
-      bgColor: "linear-gradient(135deg, #FF6B6B 0%, #FF8E72 100%)",
+      headline: "Pay Half Now. Pay the Other Half Later.",
+      subheadline: "Firs' Dibs BZ — Belize's smartest way to shop and save.",
+      cta: "Shop Now",
+      href: "/search",
+      image: "/slide1.jpeg",
     },
     {
-      title: "New Arrivals Every Day",
-      description:
-        "Fresh styles added daily. Don't miss out on the latest fashion. Be the first to reserve!",
-      cta: "EXPLORE NEW",
-      bgImage:
-        "url('https://images.pexels.com/photos/1055691/pexels-photo-1055691.jpeg?auto=compress&cs=tinysrgb&w=1600')",
-      bgColor: "linear-gradient(135deg, #4ECDC4 0%, #44A08D 100%)",
+      headline: "Earn Points on Every Payment.",
+      subheadline:
+        "Get 10 points per BZ$10 deposit + 5 points per BZ$10 balance payment. Redeem starting at just 300 points!",
+      cta: "Explore Rewards",
+      href: "/rewards",
+      image: "/slide2.jpeg",
     },
     {
-      title: "Flash Sale: 24 Hours Only",
-      description:
-        "Up to 70% off on selected items. Limited time offer! Reserve your favorites now!",
-      cta: "SHOP SALE",
-      bgImage:
-        "url('https://images.pexels.com/photos/1536619/pexels-photo-1536619.jpeg?auto=compress&cs=tinysrgb&w=1600')",
-      bgColor: "linear-gradient(135deg, #F093FB 0%, #F5576C 100%)",
+      headline: "Free Shipping Nationwide.",
+      subheadline:
+        "Redeem with only 500 loyalty points — or pay standard rates from BZ$10–BZ$25.",
+      cta: "View Shipping Info",
+      href: "/shipping",
+      image: "/slide3.jpeg",
+    },
+    {
+      headline: "👶 Welcome to Our Baby & Toddler Collection",
+      subheadline:
+        "Everything you need for your little one — strollers, car seats, cribs, clothing, diapers, and nursery essentials.",
+      cta: "Shop Baby Now",
+      href: "/search?q=baby",
+      image: "/slide4.jpeg",
+    },
+    {
+      headline: "Invite a Friend. Earn 50 Points.",
+      subheadline:
+        "When your friend completes their first deposit, you both win.",
+      cta: "Refer Now",
+      href: "/account",
+      image: "/slide5.jpeg",
     },
   ];
 
-  useEffect(() => {
-    const timer = setInterval(() => {
+  function startTimer() {
+    if (timerRef.current) clearInterval(timerRef.current);
+    timerRef.current = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % slides.length);
     }, 5000);
-    return () => clearInterval(timer);
-  }, []);
+  }
+
+  useEffect(() => {
+    if (!isHovered) startTimer();
+    else if (timerRef.current) clearInterval(timerRef.current);
+    return () => {
+      if (timerRef.current) clearInterval(timerRef.current);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isHovered]);
+
+  function goTo(idx: number) {
+    setCurrentSlide(idx);
+    startTimer();
+  }
+
+  function prev() {
+    goTo((currentSlide - 1 + slides.length) % slides.length);
+  }
+
+  function next() {
+    goTo((currentSlide + 1) % slides.length);
+  }
 
   return (
     <section className="mx-auto max-w-7xl px-4 py-2">
       <div
         className="relative overflow-hidden rounded-2xl shadow-2xl"
-        style={{ boxShadow: "0 10px 30px rgba(0,0,0,0.15)" }}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
       >
-        <div className="relative h-96 sm:h-[450px]">
+        <div className="relative h-80 sm:h-[420px] lg:h-[500px]">
           {/* Slides */}
           {slides.map((slide, index) => (
             <div
               key={index}
+              aria-hidden={index !== currentSlide}
               className={`absolute inset-0 transition-opacity duration-1000 ${
-                index === currentSlide ? "opacity-100" : "opacity-0"
+                index === currentSlide
+                  ? "opacity-100"
+                  : "opacity-0 pointer-events-none"
               }`}
-              style={{
-                backgroundImage: `linear-gradient(rgba(15,47,99,0.4), rgba(15,47,99,0.4)), ${slide.bgImage}`,
-                backgroundSize: "cover",
-                backgroundPosition: "center",
-                backgroundColor: slide.bgColor,
-                backgroundBlendMode: "darken",
-              }}
             >
-              {/* Slide Content - Bottom Left */}
-              <div
-                className="absolute bottom-12 left-12 max-w-sm text-white"
-                style={{
-                  animation:
-                    index === currentSlide
-                      ? "slideInLeft 0.8s ease forwards"
-                      : "none",
-                }}
-              >
-                <div className="rounded-2xl bg-[rgba(15,47,99,0.85)] backdrop-blur-sm p-8 border border-white/20">
+              {/* Background image */}
+              <img
+                src={slide.image}
+                alt=""
+                aria-hidden="true"
+                className="absolute inset-0 h-full w-full object-cover"
+                loading={index === 0 ? "eager" : "lazy"}
+              />
+
+              {/* Dark gradient overlay */}
+              <div className="absolute inset-0 bg-gradient-to-r from-[#0f2f63]/80 via-[#0f2f63]/50 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#0f2f63]/60 via-transparent to-transparent" />
+
+              {/* Slide content */}
+              <div className="absolute inset-0 flex items-end sm:items-center pb-16 sm:pb-0">
+                <div className="px-6 sm:px-12 max-w-xl">
                   <h2
-                    className="text-4xl font-black mb-3 font-montserrat leading-tight"
-                    style={{
-                      animation:
-                        index === currentSlide
-                          ? "fadeInUp 0.8s ease forwards"
-                          : "none",
-                    }}
+                    className={`text-2xl sm:text-3xl lg:text-4xl font-black font-montserrat leading-tight text-white mb-3 drop-shadow-lg transition-all duration-700 ${
+                      index === currentSlide
+                        ? "opacity-100 translate-y-0"
+                        : "opacity-0 translate-y-4"
+                    }`}
                   >
-                    {slide.title}
+                    {slide.headline}
                   </h2>
                   <p
-                    className="text-lg mb-6 opacity-95"
-                    style={{
-                      animation:
-                        index === currentSlide
-                          ? "fadeInUp 0.8s ease 0.2s forwards"
-                          : "none",
-                    }}
+                    className={`text-sm sm:text-base text-white/90 mb-5 leading-relaxed drop-shadow transition-all duration-700 delay-100 ${
+                      index === currentSlide
+                        ? "opacity-100 translate-y-0"
+                        : "opacity-0 translate-y-4"
+                    }`}
                   >
-                    {slide.description}
+                    {slide.subheadline}
                   </p>
                   <Link
-                    href="/search"
-                    style={{
-                      animation:
-                        index === currentSlide
-                          ? "fadeInUp 0.8s ease 0.4s forwards"
-                          : "none",
-                    }}
+                    href={slide.href}
+                    className={`transition-all duration-700 delay-200 inline-block ${
+                      index === currentSlide
+                        ? "opacity-100 translate-y-0"
+                        : "opacity-0 translate-y-4"
+                    }`}
+                    aria-label={slide.cta}
                   >
-                    <Button className="bg-[#7FF46A] hover:bg-[#7FF46A]/90 text-[#1F2661] hover:shadow-lg transform hover:-translate-y-1 transition-transform">
-                      {slide.cta}
-                    </Button>
+                    <button className="rounded-full bg-[#7FF46A] px-6 py-3 text-sm font-extrabold text-[#1F2661] shadow-lg transition hover:bg-white hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0">
+                      {slide.cta} →
+                    </button>
                   </Link>
                 </div>
               </div>
             </div>
           ))}
 
-          {/* Dots - Bottom Center */}
-          <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-3 z-10">
+          {/* Prev / Next arrow buttons */}
+          <button
+            onClick={prev}
+            aria-label="Previous slide"
+            className="absolute left-3 top-1/2 -translate-y-1/2 z-10 flex h-9 w-9 items-center justify-center rounded-full bg-black/30 text-white backdrop-blur-sm transition hover:bg-black/60"
+          >
+            ‹
+          </button>
+          <button
+            onClick={next}
+            aria-label="Next slide"
+            className="absolute right-3 top-1/2 -translate-y-1/2 z-10 flex h-9 w-9 items-center justify-center rounded-full bg-black/30 text-white backdrop-blur-sm transition hover:bg-black/60"
+          >
+            ›
+          </button>
+
+          {/* Dot indicators */}
+          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-10">
             {slides.map((_, index) => (
               <button
                 key={index}
-                onClick={() => setCurrentSlide(index)}
-                className={`w-3 h-3 rounded-full transition-all ${
+                onClick={() => goTo(index)}
+                aria-label={`Go to slide ${index + 1}`}
+                className={`h-2.5 rounded-full transition-all duration-300 ${
                   index === currentSlide
-                    ? "bg-white scale-125 w-8"
-                    : "bg-white/50 hover:bg-white/75"
+                    ? "w-7 bg-[#7FF46A]"
+                    : "w-2.5 bg-white/50 hover:bg-white/80"
                 }`}
               />
             ))}
+          </div>
+
+          {/* Slide counter */}
+          <div className="absolute bottom-4 right-4 z-10 rounded-full bg-black/30 px-3 py-1 text-xs font-semibold text-white backdrop-blur-sm">
+            {currentSlide + 1} / {slides.length}
           </div>
         </div>
       </div>
