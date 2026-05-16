@@ -3,6 +3,16 @@
 import { useState, type FormEvent } from "react";
 import { HeroBar } from "@/components/ui/HeroBar";
 import { COMPANY } from "@/lib/company";
+import {
+  CheckCircle2,
+  Clock3,
+  Instagram,
+  Mail,
+  MapPin,
+  MessageSquareText,
+  Phone,
+  Send,
+} from "lucide-react";
 
 /* ------------------------------------------------------------------ */
 /*  Types                                                              */
@@ -69,20 +79,23 @@ export default function ContactClient() {
       <HeroBar
         title="Contact Us"
         description="We'd love to hear from you"
-        accent="💬 Response within 24 hours"
+        accent="Response within 24 hours"
       />
 
-      <div className="grid gap-8 md:grid-cols-2 mt-6">
-        {/* Left – Business info */}
+      <div className="grid gap-8 mt-6 md:grid-cols-2">
+        {/* Left - Business info */}
         <div className="space-y-6">
           {/* Info card */}
           <div className="rounded-2xl border border-[#eef2f5] bg-white p-6">
-            <h3 className="text-lg font-bold text-[#1F2661] mb-4">
-              📍 Get In Touch
+            <h3 className="mb-4 flex items-center gap-2 text-lg font-bold text-[#1F2661]">
+              <MapPin size={18} className="text-[#7FF46A]" />
+              Get In Touch
             </h3>
             <ul className="space-y-3 text-sm text-[#5a6879]">
               <li className="flex items-start gap-2">
-                <span className="text-base">📱</span>
+                <span className="mt-0.5 inline-flex h-7 w-7 items-center justify-center rounded-full bg-[#eef6ff] text-[#1F2661]">
+                  <Phone size={14} />
+                </span>
                 <div>
                   <p className="font-semibold text-[#1F2661]">
                     Phone / WhatsApp
@@ -91,7 +104,9 @@ export default function ContactClient() {
                 </div>
               </li>
               <li className="flex items-start gap-2">
-                <span className="text-base">📧</span>
+                <span className="mt-0.5 inline-flex h-7 w-7 items-center justify-center rounded-full bg-[#eef6ff] text-[#1F2661]">
+                  <Mail size={14} />
+                </span>
                 <div>
                   <p className="font-semibold text-[#1F2661]">Email</p>
                   <a
@@ -103,7 +118,9 @@ export default function ContactClient() {
                 </div>
               </li>
               <li className="flex items-start gap-2">
-                <span className="text-base">📸</span>
+                <span className="mt-0.5 inline-flex h-7 w-7 items-center justify-center rounded-full bg-[#eef6ff] text-[#1F2661]">
+                  <Instagram size={14} />
+                </span>
                 <div>
                   <p className="font-semibold text-[#1F2661]">Instagram</p>
                   <a
@@ -121,8 +138,9 @@ export default function ContactClient() {
 
           {/* Hours card */}
           <div className="rounded-2xl border border-[#eef2f5] bg-white p-6">
-            <h3 className="text-lg font-bold text-[#1F2661] mb-4">
-              🕐 Business Hours
+            <h3 className="mb-4 flex items-center gap-2 text-lg font-bold text-[#1F2661]">
+              <Clock3 size={18} className="text-[#7FF46A]" />
+              Business Hours
             </h3>
             <ul className="space-y-1 text-sm text-[#5a6879]">
               {COMPANY.hours.map((h) => (
@@ -140,23 +158,32 @@ export default function ContactClient() {
               href={COMPANY.whatsapp}
               target="_blank"
               rel="noopener noreferrer"
-              className="rounded-full bg-[#25D366] px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-[#128C7E]"
+              className="inline-flex items-center gap-2 rounded-full bg-[#25D366] px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-[#128C7E] hover:shadow-md"
             >
-              💬 WhatsApp
+              <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-white/20">
+                <WhatsAppIcon size={13} />
+              </span>
+              <span>WhatsApp</span>
             </a>
             <a
               href={COMPANY.instagram}
               target="_blank"
               rel="noopener noreferrer"
-              className="rounded-full bg-gradient-to-r from-[#f09433] via-[#e6683c] to-[#bc1888] px-5 py-2.5 text-sm font-semibold text-white transition hover:opacity-90"
+              className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-[#f09433] via-[#e6683c] to-[#bc1888] px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:-translate-y-0.5 hover:opacity-90 hover:shadow-md"
             >
-              📸 Instagram
+              <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-white/20">
+                <Instagram size={13} />
+              </span>
+              <span>Instagram</span>
             </a>
             <a
               href={`mailto:${COMPANY.email}`}
-              className="rounded-full bg-[#1F2661] px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-[#ff4676]"
+              className="inline-flex items-center gap-2 rounded-full bg-[#1F2661] px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-[#ff4676] hover:shadow-md"
             >
-              📧 Email
+              <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-white/20">
+                <Mail size={13} />
+              </span>
+              <span>Email</span>
             </a>
           </div>
 
@@ -175,10 +202,11 @@ export default function ContactClient() {
           </div>
         </div>
 
-        {/* Right – Contact form */}
+        {/* Right - Contact form */}
         <div className="rounded-2xl border border-[#eef2f5] bg-white p-6">
-          <h3 className="text-lg font-bold text-[#1F2661] mb-1">
-            📝 Send a Message
+          <h3 className="mb-1 flex items-center gap-2 text-lg font-bold text-[#1F2661]">
+            <MessageSquareText size={18} className="text-[#7FF46A]" />
+            Send a Message
           </h3>
           <p className="text-sm text-[#5a6879] mb-5">
             Fill out the form below and we'll get back to you within 24 hours.
@@ -186,7 +214,9 @@ export default function ContactClient() {
 
           {status === "success" ? (
             <div className="rounded-xl bg-[#e8f8e5] p-6 text-center">
-              <p className="text-3xl mb-2">✅</p>
+              <div className="mb-2 flex justify-center">
+                <CheckCircle2 size={30} className="text-[#2e8f43]" />
+              </div>
               <p className="font-bold text-[#1F2661]">Message Sent!</p>
               <p className="text-sm text-[#5a6879] mt-1">
                 Thanks for reaching out. We'll reply within 24 hours.
@@ -277,9 +307,10 @@ export default function ContactClient() {
               <button
                 type="submit"
                 disabled={status === "loading"}
-                className="w-full rounded-full bg-[#1F2661] py-3 text-sm font-semibold text-white transition hover:bg-[#7FF46A] hover:text-[#1F2661] disabled:opacity-50"
+                className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#1F2661] py-3 text-sm font-semibold text-white transition hover:bg-[#7FF46A] hover:text-[#1F2661] disabled:opacity-50"
               >
-                {status === "loading" ? "Sending…" : "Send Message"}
+                <Send size={14} />
+                {status === "loading" ? "Sending..." : "Send Message"}
               </button>
             </form>
           )}
@@ -289,5 +320,19 @@ export default function ContactClient() {
       {/* Bottom spacer */}
       <div className="h-8" />
     </div>
+  );
+}
+
+function WhatsAppIcon({ size = 13 }: { size?: number }) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 16 16"
+      fill="currentColor"
+      aria-hidden="true"
+    >
+      <path d="M13.601 2.326A7.85 7.85 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.9 7.9 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.9 7.9 0 0 0 13.6 2.326zM7.994 14.521a6.6 6.6 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.56 6.56 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592m3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.73.73 0 0 0-.529.247c-.182.198-.691.677-.691 1.654s.71 1.916.81 2.049c.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232" />
+    </svg>
   );
 }

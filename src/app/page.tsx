@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState, useRef } from "react";
 import { searchItems } from "@/lib/dataSource";
 import { StarIcon, ShoppingBagIcon, FireIcon } from "@/components/DividerIcons";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 export default function HomePage() {
   const router = useRouter();
   const [featured, setFeatured] = useState<any[]>([]);
@@ -572,35 +573,11 @@ function CategoriesNav({
 }
 
 function FeaturedItemsCarousel({ items }: { items: any[] }) {
-  const [isAutoScroll, setIsAutoScroll] = useState(true);
   const containerRef = useRef<HTMLDivElement>(null);
-
-  // Duplicate items for infinite scroll effect
-  const displayItems = [...items, ...items];
-
-  useEffect(() => {
-    if (!isAutoScroll || !containerRef.current) return;
-
-    const container = containerRef.current;
-    let scrollAmount = 0;
-
-    const interval = setInterval(() => {
-      scrollAmount += 2;
-      container.scrollLeft = scrollAmount;
-
-      // Reset to beginning for infinite loop
-      if (container.scrollLeft >= container.scrollWidth / 2) {
-        scrollAmount = 0;
-        container.scrollLeft = 0;
-      }
-    }, 50);
-
-    return () => clearInterval(interval);
-  }, [isAutoScroll]);
 
   const scroll = (direction: "left" | "right") => {
     if (!containerRef.current) return;
-    const scrollAmount = 250;
+    const scrollAmount = 320;
     if (direction === "left") {
       containerRef.current.scrollLeft -= scrollAmount;
     } else {
@@ -608,72 +585,106 @@ function FeaturedItemsCarousel({ items }: { items: any[] }) {
     }
   };
 
+  const parsePrice = (value: unknown): number | null => {
+    if (typeof value === "number" && Number.isFinite(value)) return value;
+    if (typeof value !== "string") return null;
+    const numeric = Number(value.replace(/[^0-9.]/g, ""));
+    return Number.isFinite(numeric) ? numeric : null;
+  };
+
+  const getRandomizedSalePercent = (seed: string): number => {
+    let hash = 0;
+    for (let i = 0; i < seed.length; i += 1) {
+      hash = (hash * 31 + seed.charCodeAt(i)) | 0;
+    }
+    return 10 + (Math.abs(hash) % 16);
+  };
+
   return (
     <div className="relative">
       {/* Scroll Buttons */}
       <button
         onClick={() => scroll("left")}
-        className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white rounded-full p-3 shadow-lg border-2 border-[#0f2f63] text-[#0f2f63] hover:bg-[#0f2f63] hover:text-white transition-all hover:scale-110 -ml-6"
+        aria-label="Scroll left"
+        className="absolute left-2 top-1/2 z-10 -translate-y-1/2 rounded-full border-2 border-[#0f2f63] bg-white p-2.5 text-[#0f2f63] shadow-lg transition-all hover:scale-105 hover:bg-[#0f2f63] hover:text-white"
       >
-        ←
+        <ChevronLeft size={18} />
       </button>
       <button
         onClick={() => scroll("right")}
-        className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white rounded-full p-3 shadow-lg border-2 border-[#0f2f63] text-[#0f2f63] hover:bg-[#0f2f63] hover:text-white transition-all hover:scale-110 -mr-6"
+        aria-label="Scroll right"
+        className="absolute right-2 top-1/2 z-10 -translate-y-1/2 rounded-full border-2 border-[#0f2f63] bg-white p-2.5 text-[#0f2f63] shadow-lg transition-all hover:scale-105 hover:bg-[#0f2f63] hover:text-white"
       >
-        →
+        <ChevronRight size={18} />
       </button>
 
       {/* Carousel */}
       <div
         ref={containerRef}
-        className="flex gap-6 overflow-x-auto scroll-smooth pb-2 px-4"
-        onMouseEnter={() => setIsAutoScroll(false)}
-        onMouseLeave={() => setIsAutoScroll(true)}
+        className="flex snap-x snap-mandatory gap-6 overflow-x-auto scroll-smooth px-14 pb-2"
         style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
       >
-        {displayItems.map((item, idx) => (
-          <Link
-            key={`${item.id}-${idx}`}
-            href={`/item/${item.id}`}
-            className="group relative flex-shrink-0 w-56 rounded-2xl bg-white overflow-hidden transition-all hover:-translate-y-2"
-            style={{ boxShadow: "0 5px 15px rgba(0,0,0,0.08)" }}
-          >
-            {/* Badge */}
-            <div className="absolute top-4 left-4 z-10 bg-gradient-to-r from-[#ff3b6d] to-[#ff6b95] text-white px-4 py-1.5 rounded-full text-xs font-bold shadow-md">
-              PREORDER
-            </div>
+        {items.map((item, idx) => {
+          const currentPrice = parsePrice(item?.price?.formatted ?? item?.price);
+          const originalPrice = parsePrice(item?.original_price);
+          const isOnSale =
+            currentPrice !== null &&
+            originalPrice !== null &&
+            originalPrice > currentPrice;
+          const salePercent = isOnSale
+            ? Math.round(((originalPrice - currentPrice) / originalPrice) * 100)
+            : null;
+          const randomizedPercent = getRandomizedSalePercent(
+            `${item?.id ?? item?.title ?? "item"}-${idx}`,
+          );
+          const saleLabel = `SALE ${salePercent ?? randomizedPercent}%`;
 
-            {/* Image */}
-            <div className="relative h-56 bg-zinc-100 overflow-hidden">
-              <img
-                src={item.image}
-                alt={item.title}
-                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-              />
-            </div>
-
-            {/* Info */}
-            <div className="p-4">
-              <h3 className="text-sm font-semibold text-zinc-900 line-clamp-2 group-hover:text-[#0f2f63] transition-colors">
-                {item.title}
-              </h3>
-              <div className="mt-2 flex items-baseline gap-2">
-                <span className="text-lg font-bold text-[#ff3b6d]">
-                  {item.price.formatted}
-                </span>
-                {item.original_price && (
-                  <span className="text-xs text-zinc-500 line-through">
-                    ${item.original_price}
-                  </span>
-                )}
+          return (
+            <Link
+              key={`${item.id}-${idx}`}
+              href={`/item/${item.id}`}
+              className="group relative w-[15.5rem] flex-shrink-0 snap-start overflow-hidden rounded-2xl bg-white transition-all hover:-translate-y-1"
+              style={{ boxShadow: "0 5px 15px rgba(0,0,0,0.08)" }}
+            >
+              {/* Badges */}
+              <div className="absolute left-3 top-3 z-10 rounded-full bg-gradient-to-r from-[#ff3b6d] to-[#ff6b95] px-3 py-1 text-xs font-bold text-white shadow-md">
+                PREORDER
               </div>
-              <button className="w-full mt-4 bg-gradient-to-r from-[#0f2f63] to-[#1a3f7a] hover:from-[#1a3f7a] hover:to-[#0f2f63] text-white font-semibold py-2 rounded-lg transition-all shadow-md hover:shadow-lg relative overflow-hidden group/btn">
-                <span className="relative z-10">Shop Now</span>
-              </button>
-            </div>
-          </Link>
-        ))}
+              <div className="absolute right-3 top-3 z-10 rounded-full bg-[#1f2661] px-3 py-1 text-xs font-extrabold text-white shadow-md">
+                {saleLabel}
+              </div>
+
+              {/* Image */}
+              <div className="relative h-56 overflow-hidden bg-zinc-100">
+                <img
+                  src={item.image}
+                  alt={item.title}
+                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                />
+              </div>
+
+              {/* Info */}
+              <div className="flex min-h-[168px] flex-col p-4">
+                <h3 className="line-clamp-2 text-sm font-semibold text-zinc-900 transition-colors group-hover:text-[#0f2f63]">
+                  {item.title}
+                </h3>
+                <div className="mt-2 flex items-end gap-2">
+                  <span className="text-lg font-bold text-[#ff3b6d]">
+                    {item.price.formatted}
+                  </span>
+                  {(isOnSale || item.original_price) && (
+                    <span className="text-xs text-zinc-500 line-through">
+                      ${item.original_price}
+                    </span>
+                  )}
+                </div>
+                <button className="group/btn relative mt-auto w-full overflow-hidden rounded-lg bg-gradient-to-r from-[#0f2f63] to-[#1a3f7a] py-2 font-semibold text-white shadow-md transition-all hover:shadow-lg">
+                  <span className="relative z-10">Shop Now</span>
+                </button>
+              </div>
+            </Link>
+          );
+        })}
       </div>
     </div>
   );
